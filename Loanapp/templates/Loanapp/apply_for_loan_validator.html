@@ -1,0 +1,81 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% block header %}
+<!-- <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js '%}"></script> -->
+<!-- <script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js '%}"></script> -->
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/selects/select2.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/uniform.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/demo_pages/form_layouts.js '%}"></script>
+
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid my-4">
+    <!-- <a href="" data-toggle="modal" data-target="#welcomemodal" >this</a> -->
+    
+    <!--modal-->
+    <div class="modal fade" data-keyboard="false" id="welcomemodal" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="ducument">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <div class="container">
+                        <a  class="btn btn-outline-dark" style="float: right;" href="/"><i class="icon-cross2"></i></a>
+                        <i class="icon-user icon-2x mb-3" style="color: grey"></i>
+                        <div class="col-12 text-center">
+                            <div class="alert alert-dark">
+                        <h5 style="font-weight: 400">Kindly Enter the Id number of the Borrower applying for the loan.</h5>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+                <form action="{% url 'Loanapp:perform_loan_validation' %}" method="POST">
+                        <div class="modal-body text-center bg-gray-200">
+                                    {% csrf_token %}                        
+                                        <div class="row">
+                                            <div class="col-md-8 offset-md-2">
+                                                <div class="form-group">
+                                                    <label>Asset name:</label>
+                                                    <input type="text" required name="id_number" placeholder="id_number"
+                                                        class="form-control border-teal border-1">
+                                                </div>
+                                            </div>              
+                                    </div>
+            
+                        </div>
+                        <div class="modal-footer">
+                            <div class="container text-center">
+                                <button class="btn btn-sm" style="
+                                background-color: #4A054A;
+                                color: white;
+                                font-weight: 400;
+                                width: 130px;
+                                border-radius: 30px;
+                                "   type="submit" id="agree">Validate <span id="spinner"></span></button>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function mine() {
+            
+            document.getElementById("agree").addEventListener('click', function(){
+                $("#spinner").addClass("spinner-border  spinner-border-sm");
+            })
+        }
+
+    </script>
+    
+    <script>
+        $(document).ready(function () {
+            $("#welcomemodal").modal("show");
+        });
+    </script>
+</div>
+{% endblock body %}
+

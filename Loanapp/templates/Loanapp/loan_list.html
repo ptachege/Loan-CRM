@@ -1,0 +1,302 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js' %}"></script> -->
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card my-4">
+                <div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+                    <h5 class="card-title"><i class="icon-cash"></i> &nbsp; Loans</h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" data-action="collapse"></a>
+                            <a class="list-icons-item" data-action="reload"></a>
+                            <a class="list-icons-item" data-action="remove"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-md-12">
+            <div class="card my-3">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-tabs-bottom border-bottom-0 nav-justified">
+                        <li class="nav-item"><a href="#bottom-justified-divided-tab1" class="nav-link active"
+                                data-toggle="tab"><i class="icon-files-empty2 mr-2"></i> Active Loans</a></li>
+                        <li class="nav-item"><a href="#bottom-justified-divided-tab2" class="nav-link" data-toggle="tab"> <i
+                                    class="icon-books mr-2"></i> Loan History</a></li>
+                    </ul>
+        
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="bottom-justified-divided-tab1">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><b>#</b></th>
+                                            <th><b>Borrower</b></th>
+                                            <th><b>Membership Fee</b></th>
+                                            <th><b>Expected Amount</b></th>
+                                            <th><b>Interest Rate</b></th>
+                                            <th><b>Period</b></th>
+                                            <th><b>total loan</b></th>
+                                            <th><b>Penalty</b></th>
+                                            <th><b>Payment Plan</b></th>
+                                            <th><b>status</b></th>
+                                            <th><b>Action</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+        
+                                        {% for loan in active_loans %}
+        
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td> {{loan.borrower}}</td>
+                                            <td> 
+                                                
+                                                {% if loan.borrower.paid_membership_fee == True %}
+                                                    <i class="icon-checkmark2" style="color:green;"></i>                                                    
+                                                    {% else %}
+                                                    <i class="icon-cross3" style="color:red;"></i>                                                    
+                                                    
+                                                {% endif %}
+                                                        
+                                               
+                                            </td>
+                                            <td>Ksh {{loan.expected_amount |intcomma}}</td>
+                                            <td>{{loan.loan_percentage}}%</td>
+                                            <td>{{loan.period}} days</td>
+                                            <td>Ksh {{loan.total_loan|intcomma}}</td>
+                                            <td>Ksh {{loan.penalty|intcomma}}</td>
+                                            <td>{{loan.payment_type}}</td>
+                                            <td>
+                                                
+                                                {% if loan.penalty > 0 %}
+
+                                                <span class="badge badge-danger">
+                                                    DEFAULTED
+                                                </span>
+                                                    
+                                                {% else %}
+                                                    
+                                               
+                                                    
+                                                {% if loan.status == "NEW" %}
+                                                <span class="badge badge-primary">
+                                                    New        
+                                                </span>
+                                                {% else %}
+        
+        
+                                                {% if loan.status == "APPROVED" %}
+        
+                                                <span class="badge badge-warning">
+                                                    Approved
+                                                </span>
+        
+                                                {% else %}
+        
+        
+        
+                                                {% if loan.status == "DENIED" %}
+        
+                                                <span class="badge badge-danger">
+                                                    Denied
+                                                </span>
+        
+                                                {% else %}
+        
+        
+                                                {% if loan.status == "DISBURSED" %}
+        
+                                                <span class="badge badge-success">
+                                                    Active
+                                                </span>
+        
+                                                {% else %}
+                                                <span class="badge badge-success">
+                                                    Fully Paid
+                                                </span>
+        
+                                                {% endif %}
+        
+        
+                                                {% endif %}
+        
+        
+        
+                                                {% endif %}
+        
+        
+                                                {% endif %}
+
+                                            {% endif %}
+        
+                                            </td>
+                                            <td>
+        
+                                                <a href="{% url 'Loanapp:loan_detail' loan.id %}">
+                                                    <i class="icon-eye4 ml-2" style="color:black;"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+        
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="alert alert-warning text-center">
+                                                    <p>
+                                                        <i class="icon-warning mr-3"></i>
+                                                        {{borrower}} doesn't have an active loan
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+        
+        
+                                    </tbody>
+                                </table>
+                            </div>
+        
+                        </div>
+        
+                        <div class="tab-pane fade" id="bottom-justified-divided-tab2">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><b>#</b></th>
+                                            <th><b>Borrower</b></th>
+                                            <th><b>Membership Fee</b></th>
+                                            <th><b>Expected Amount</b></th>
+                                            <th><b>Interest Rate</b></th>
+                                            <th><b>Period</b></th>
+                                            <th><b>total loan</b></th>
+                                            <th><b>Payment Plan</b></th>
+                                            <th><b>status</b></th>
+                                            <th><b>Action</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+        
+                                        {% for loan in loan_history %}
+        
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td> {{loan.borrower}}</td>
+                                            <td>
+                                            
+                                                {% if loan.borrower.paid_membership_fee == True %}
+                                                <i class="icon-checkmark2" style="color:green;"></i>
+                                                {% else %}
+                                                <i class="icon-cross3" style="color:red;"></i>
+                                            
+                                                {% endif %}
+                                            
+                                            
+                                            </td>
+                                            <td>Ksh {{loan.expected_amount |intcomma}}</td>
+                                            <td>{{loan.loan_percentage}}%</td>
+                                            <td>{{loan.period}} days</td>
+                                            <td>Ksh {{loan.total_loan|intcomma}}</td>
+                                            <td>{{loan.payment_type}}</td>
+                                            <td>
+        
+                                                {% if loan.status == "NEW" %}
+                                                <span class="badge badge-primary">
+                                                    New
+                                                </span>
+                                                {% else %}
+        
+        
+                                                {% if loan.status == "APPROVED" %}
+        
+                                                <span class="badge badge-warning">
+                                                    Approved
+                                                </span>
+        
+                                                {% else %}
+        
+        
+        
+                                                {% if loan.status == "DENIED" %}
+        
+                                                <span class="badge badge-danger">
+                                                    Denied
+                                                </span>
+        
+                                                {% else %}
+        
+        
+                                                {% if loan.status == "DISBURSED" %}
+        
+                                                <span class="badge badge-dark">
+                                                    Active
+                                                </span>
+        
+                                                {% else %}
+                                                <span class="badge badge-success">
+                                                    Fully Paid
+                                                </span>
+        
+                                                {% endif %}
+        
+        
+                                                {% endif %}
+        
+        
+        
+                                                {% endif %}
+        
+        
+                                                {% endif %}
+        
+                                            </td>
+                                            <td>
+        
+                                                <a href="{% url 'Loanapp:loan_detail' loan.id %}">
+                                                    <i class="icon-eye4 ml-2" style="color:black;"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+        
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="alert alert-warning text-center">
+                                                    <p>
+                                                        <i class="icon-warning mr-3"></i> No Record found.
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+        
+        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        </div>
+
+    </div>
+</div>
+{% block scripts %}
+{% endblock scripts %}
+
+{% endblock body %}

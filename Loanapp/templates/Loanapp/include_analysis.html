@@ -1,0 +1,225 @@
+   <div class="row">         
+            <div class="col-lg-4">
+                <div class="card my-3 text-center">
+                    <div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+                        <h5 class="card-title"><i class="icon-calendar"></i> &nbsp;Loan Stats Today </h5>
+                        
+                    </div>
+                </div>
+                <div class="card single-cards">
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="overallchart5" height="120"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card my-3 text-center">
+                    <div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+                        <h5 class="card-title"><i class="icon-calendar"></i> &nbsp;Loan Stats This Week </h5>
+                        
+                    </div>
+                </div>
+                <div class="card single-cards">
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="overallchart6" height="120"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card my-3 text-center">
+                    <div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+                        <h5 class="card-title"><i class="icon-calendar"></i> &nbsp;Loan Stats This Month </h5>
+                        
+                    </div>
+                </div>
+                <div class="card single-cards">
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="overallchart7" height="120"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+{% block scripts %}
+<script>
+
+    var ctx = document.getElementById('overallchart4').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for item in label3 %}'{{item}}',{% endfor %}],
+    datasets: [
+        {
+        label: 'Number of Loan Applications',
+        data: {{ data3 }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(54, 162, 235, 0.5)',
+        'rgba(255, 206, 86, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(153, 102, 255, 0.5)',
+        'rgba(255, 159, 64, 0.5)'
+
+        ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+        },
+
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+<script>
+
+    var ctx = document.getElementById('overallchart5').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: [{% for item in label2 %}'{{item}}',{% endfor %}],
+    datasets: [
+        {
+        label: 'Number of Loan Applications',
+        data: {{ data2 }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(54, 162, 235, 0.5)',
+        'rgba(255, 206, 86, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(153, 102, 255, 0.5)',
+        'rgba(255, 159, 64, 0.5)'
+
+        ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+        },
+
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+<script>
+
+    var ctx = document.getElementById('overallchart6').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: [{% for item in label4 %}'{{item}}',{% endfor %}],
+    datasets: [
+        {
+        label: 'Number of Loan Applications',
+        data: {{ data4 }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(54, 162, 235, 0.5)',
+        'rgba(255, 206, 86, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(153, 102, 255, 0.5)',
+        'rgba(255, 159, 64, 0.5)'
+
+        ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+        },
+
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+<script>
+
+    var ctx = document.getElementById('overallchart7').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: [{% for item in label5 %}'{{item}}',{% endfor %}],
+    datasets: [
+        {
+        label: 'Number of Loan Applications',
+        data: {{ data5 }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(54, 162, 235, 0.5)',
+        'rgba(255, 206, 86, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(153, 102, 255, 0.5)',
+        'rgba(255, 159, 64, 0.5)'
+
+        ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+        },
+
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock scripts %}

@@ -1,0 +1,143 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js' %}"></script> -->
+
+    <script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+    <script
+        src="{% static 'Loanapp/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+    <script
+        src="{% static 'Loanapp/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/demo_pages/datatables_extension_buttons_html5.js' %}"></script>
+
+
+    <script src="{% static 'Loanapp/global_assets/js/plugins/pickers/daterangepicker.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/pickers/anytime.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/pickers/pickadate/picker.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/pickers/pickadate/picker.date.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/pickers/pickadate/picker.time.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/pickers/pickadate/legacy.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/notifications/jgrowl.min.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/demo_pages/picker_date.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/ui/moment/moment.min.js' %}"></script>
+
+
+    <!-- /core JS files -->
+    
+    <!-- Theme JS files -->
+    <!--
+   
+     -->
+
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card my-4">
+                <div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+                    <h5 class="card-title"><i class="icon-coins"></i> &nbsp; Disbursment Report </h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" data-action="collapse"></a>
+                            <a class="list-icons-item" data-action="reload"></a>
+                            <a class="list-icons-item" data-action="remove"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-md-12">
+           <div class="card">
+               <div class="card-body">
+            <form action="{% url 'Loanapp:disbursment_report_subform' %}" method="POST">
+                {% csrf_token %}
+               <div class="row">                   
+                   <div class="col-md-4 offset-md-7">
+                        <div class="input-group">
+                            <input type="text" name="filterdate" class="form-control daterange-predefined" value="05/24/2022 - 05/28/2022">
+                            <span class="input-group-append">
+                                <span class="input-group-text"><i class="icon-calendar22"></i></span>
+                            </span>
+                        </div>
+
+                        
+                    </div>
+                    <div class="col-md-1 ">
+                        <button type="submit" class="btn btn-walaka"> Search</button>
+                    </div>
+                    
+                </div>
+            </form>
+
+            <div class="alert alert-info my-3 text-center">
+                <i class="icon-info22 mr-2"></i>
+                This is a list of all Disbursments <b>{{time_frame}}</b> : : <b>Total: Ksh {{total_amount|intcomma}}</b>
+            </div>
+                
+                    <div class="table-responsive">
+                        <table class="table datatable-button-html5-basic">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Disbursement Date</th>
+                                    <th>Id number</th>
+                                    <th>Full Name</th>
+                                    <th>Disbursed By</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                           <tbody>
+                               
+                               {% for loan in all_disbursed_loans %}
+
+                               <tr>
+                                   <td>{{forloop.counter}}</td>
+                                   <td>{{loan.disbursed_at}}</td>
+                                   <td>{{loan.borrower.national_id}}</td>
+                                   <td>{{loan.borrower.first_name}} {{loan.borrower.last_name}}</td>
+                                   <td>{{loan.disbursed_by.userprofiles.first_name}} {{loan.disbursed_by.userprofiles.last_name}}</td>
+                                   <td>Ksh {{loan.expected_amount|intcomma}}</td>
+                                   <td>
+                                       <a href="{% url 'Loanapp:loan_detail' loan.id %}">
+                                           <i class="icon-eye" style="color: black;"></i>
+                                       </a>
+                                   </td>
+                               </tr>
+                                   
+                               {% endfor %}
+                                   
+                           </tbody>
+
+                           <tfoot>
+                               <tr>
+                                   <td>Total:</td>
+                                   <td>
+                                      <b> Ksh {{total_amount|intcomma}} </b>
+                                   </td>
+                               </tr>
+                           </tfoot>
+                        </table>
+                    </div>
+               </div>
+           </div>
+        </div>
+
+        </div>
+
+    </div>
+</div>
+{% block scripts %}
+{% endblock scripts %}
+
+{% endblock body %}

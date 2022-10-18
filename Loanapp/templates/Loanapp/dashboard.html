@@ -1,0 +1,370 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<link rel="stylesheet" href="{% static 'Loanapp/assets/css/style.css' %}">
+<script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js' %}"></script>
+<link href="{% static 'Loanapp/global_assets/css/icons/material/styles.min.css' %}" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js'%}"></script>
+      <script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js'%}"></script> -->
+
+
+{% endblock header %}
+
+{% block body %}
+       <main>
+           
+           <section class="glass my-3">
+                <div class="row">
+                    <div class="col-md-12">
+                       <div class="container-fluid">
+                            <div class="card" style="background: transparent; border: none; outline: none;">
+                                <div class="card-body">
+                                    
+                                    {% if request.user.userprofiles.role == 'Admin' %}
+                                        
+                                   
+                                        
+                                    <div class="btn-group">
+                                        <button type="button" class="btn bg-teal-400 btn-labeled btn-labeled-left rounded-round dropdown-toggle"
+                                            data-toggle="dropdown"><b><i class="icon-git-branch"></i></b> {{branch_name}}</button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a href="{% url 'Loanapp:switch_branch_to_all' %}" class="dropdown-item"><i class="icon-menu7"></i> All</a>                                            
+                                            
+                                            
+                                            {% for branch in all_branches  %}
+                                                <a href="{% url 'Loanapp:switch_branch' branch.id %}" class="dropdown-item"><i class="icon-git-branch"></i> {{branch.branch_name}}</a>                                                                                        
+                                            {% endfor %}
+                                                
+                                        </div>
+                                    </div>
+
+                                    {% else %}
+
+                                    <span style="margin: 0 0;">
+                                        <i class="icon-home5 mr-1"></i> Home / Dashboard
+                                    </span>
+                                    
+                                    {% endif %}
+                                    <span class="ml-4 activedevice" style="color: #426696;
+                                        font-weight: 600;
+                                        font-size: 1.2rem;
+                                        opacity: 0.7;
+                                        float: right;
+                                        ">
+                                    Active Stats <i class="icon-stats-growth"></i></span>
+                                </div>
+                            </div>
+                       </div>
+                    </div>
+                </div>
+
+                <div class="container" style="padding-left: 20px; padding-right: 20px;">
+                    <div>
+                        <div>
+                            <div>
+
+                            
+                    <div class="row my-3">
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center" style="border-bottom: solid 3px orange;">
+                                    <div class="card-body">
+                                        <i class="icon-hour-glass2 mb-2 icon-2x  border-3 rounded-round p-3" style="font-size: 35px;"> {{testers}}</i>   
+                                        <h3>
+                                           {{new_loans}} New Borrowers
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center" style="border-bottom: solid 3px teal;">
+                                    <div class="card-body">
+                                        <i class="mi-people-outline mi-2x mb-2 border-3 rounded-round p-3" style="font-size: 35px;"> {{patients}}</i>   
+                                        <h3>
+                                           {{borrowers}} Borrowers
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center" style="border-bottom: solid 3px rgb(255, 149, 0);">
+                                    <div class="card-body">
+                                        <i class="icon-wallet mb-2 border-3 rounded-round p-3" style="font-size: 35px;"></i>   
+                                        <h3>
+                                          {{active_loans}}  Active Loans
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center" style="border-bottom: solid 3px rgb(28, 148, 148);">
+                                    <div class="card-body">
+                                        <i class="icon-user-tie mb-2 border-3 rounded-round p-3" style="font-size: 35px;"></i>   
+                                        <h3>
+                                          {{officers}}  Officers
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-lg-3">
+                                <div class="card single-cards text-center">
+                                    <div class="card-body">
+                                        <i class="icon-aid-kit border-3 rounded-round p-3 mb-2" style="font-size: 35px;">
+                                            {{vaccinations}}
+                                        </i>   
+                                        <h3>
+                                            Vaccinations
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div> -->
+                    </div>
+                    <div class="row my-3">
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center">
+                                    <div class="card-body">
+                                        <i class="icon-spinner2 spinner mb-2 icon-2x  border-3 rounded-round p-3" style="font-size: 35px;"> {{testers}}</i>   
+                                        <h3>
+                                        {{loans_pending_approval}} Loans Awaiting Approval
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center">
+                                    <div class="card-body">
+                                        <i class="icon-coins mb-2 border-3 rounded-round p-3" style="font-size: 35px;"> {{patients}}</i>   
+                                        <h3>
+                                           {{loans_pending_disburse}} Loans Awaiting Disbursement
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center">
+                                    <div class="card-body">
+                                        <i class="icon-calendar mb-2 border-3 rounded-round p-3" style="font-size: 35px;"></i>   
+                                        <h3>
+                                          Ksh {{loan_due_today|intcomma}} Due today
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="card single-cards text-center">
+                                    <div class="card-body">
+                                        <i class="icon-user-tie mb-2 border-3 rounded-round p-3" style="font-size: 35px;"></i>   
+                                        <h3>
+                                          Ksh {{payments_today|intcomma}}  Payed Today
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-3">
+                                <div class="card single-cards text-center">
+                                    <div class="card-body">
+                                        <i class="icon-aid-kit border-3 rounded-round p-3 mb-2" style="font-size: 35px;">
+                                            {{vaccinations}}
+                                        </i>   
+                                        <h3>
+                                            Vaccinations
+                                        </h3>                            
+
+                                    </div>
+                                </div>
+                            </div> -->
+                    </div>
+
+                    
+                    
+                    {% if all_installments %}
+                        
+                   
+                        
+                    <div class="row">   
+                        <div class="col-12" >
+                            <div class="card single-card" style="background-color:#4A054A;color: #fff;">
+                                <div class="card-body text-center">
+                                    <h6>
+                                        Here are some of the installments expected today.
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        
+                        {% for installment in all_installments  %}
+                 
+                            <div class="col-lg-4 my-4">
+                                <div class="card single-cards" style="max-height: 260px;">
+                                    <div class="card-body text-center">
+                                        <div class="row" style="position: relative; bottom: 60px;">
+                                            <div class="col-12 text-center">
+                                                <i class="mi-person-outline mi-4x border-3 bg-white rounded-round text-slate-400"></i>
+                                                <h5 class="text-warning">
+                                                    {{installment.loan.borrower}}
+                                                </h5>
+                                                <h6>
+                                                    <i class="icon-phone text-muted mr-1"></i> {{installment.loan.borrower.phone_number}}
+                                                </h6>
+                                                <h6>
+                                                    <i class="icon-user-tie text-muted mr-1"></i> {{installment.loan.borrower.loan_collection_officer}} : : L.C.O
+                                                </h6>
+                                                <h6>
+                                                    <i class="icon-user-tie text-muted mr-1"></i> {{installment.loan.borrower.loan_officer}} : : L.O
+                                                </h6>
+                                                <h6>
+                                                    
+                                                    <span class="badge badge-{% if installment.remaining_amount <= 0 %}success {% else %}warning{% endif %}">
+                                                        Ksh {{installment.remaining_amount}}
+                                                   </span>
+                                                </h6>
+                                                <h6 class="my-2">
+                                                    <a href="{% url 'Loanapp:loan_detail' installment.loan.id %}" class="btn btn-dark btn-sm rounded-round ">
+                                                        View More
+                                                    </a>
+                                                </h6>
+                                            </div>
+                                        </div>                                                                                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <div class="alert alert-warning">
+                                <i class="icon-warning mr-2"></i> No installments due today
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% include 'Loanapp/include_analysis.html' %}
+
+
+
+
+    
+                </div>
+           </section>
+       </main>
+       <div class="circle1"></div>
+       <div class="circle2"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% block scripts %}
+<script>
+    var ctx = document.getElementById('overallchart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for item in label %}'{{item}}',{% endfor %}],
+    datasets: [{
+        label: 'Positive Tests',
+        data: {{ data }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(54, 162, 235, 0.5)',
+        'rgba(255, 206, 86, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(153, 102, 255, 0.5)',
+        'rgba(255, 159, 64, 0.5)'
+        
+    ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+    ],
+        borderWidth: 1
+        }, 
+        {
+             label: 'Negative Tests',
+        data: {{ data2 }},
+        backgroundColor: [
+        'rgba(5, 89, 100, 1)',
+       
+        
+    ],
+        borderColor: [
+        'rgba(5, 89, 100, 1)',
+       
+    ],
+        borderWidth: 1
+        },
+    
+    
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// this is the begining of bar chart
+
+var ctx = document.getElementById('overallchart2').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in label3 %}'{{item}}',{% endfor %}],
+    datasets: [{
+        label: 'Positive Tests',
+        data: {{ data3 }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(54, 162, 235, 0.5)',
+        'rgba(255, 206, 86, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(153, 102, 255, 0.5)',
+        'rgba(255, 159, 64, 0.5)'
+        
+    ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+    ],
+        borderWidth: 1
+        },    
+    
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock scripts %}
+
+{% endblock body %}

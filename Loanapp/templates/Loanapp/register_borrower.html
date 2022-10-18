@@ -1,0 +1,558 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% block header %}
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/selects/select2.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/uniform.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/inputs/inputmask.js'%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/validation/validate.min.js'%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/extensions/cookie.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/demo_pages/form_checkboxes_radios.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/uniform.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/switchery.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/switch.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/wizards/steps.min.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDre49qP3XAU6YrOkHKliMRTbyGiKdxRPk"></script>
+<script src="{% static 'Loanapp/global_assets/js/demo_pages/form_wizard.js' %}"></script>
+    <script src="{% static 'Loanapp/global_assets/js/plugins/uploaders/fileinput/plugins/purify.min.js' %}"></script>
+    
+    <script src="{% static 'Loanapp/global_assets/js/plugins/uploaders/fileinput/plugins/sortable.min.js' %}"></script>
+    
+    <script src="{% static 'Loanapp/global_assets/js/plugins/uploaders/fileinput/fileinput.min.js' %}"></script>
+    
+    <script src="{% static 'Loanapp/global_assets/js/demo_pages/uploader_bootstrap.js' %}"></script>
+
+
+
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="card my-4">
+        <div class="card-header bg-white header-elements-inline">
+            <h4 class="card-title text-center"> <i class="icon-user-plus"></i> Register Borrower</h4>
+            <div class="header-elements">
+                <div class="list-icons">
+                    <a class="list-icons-item" data-action="collapse"></a>
+                    <a class="list-icons-item" data-action="reload"></a>
+                    <a class="list-icons-item" data-action="remove"></a>
+                </div>
+            </div>
+        </div>
+
+        <form class="wizard-form steps-validation" action="{% url 'Loanapp:register_borrower' %}" method="POST" enctype="multipart/form-data" id="myform" data-fouc>
+            {% csrf_token %}
+            <h6>Basic information</h6>
+            <fieldset>
+    
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Walaka Branch: <span class="text-danger">*</span></label>
+                            {{form.branch}}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Disbursment number <span class="text-danger">*</span>
+                                
+                            </label>
+                        <input type="text" required name="disbursment_number" placeholder="+(254)7*****" class="form-control teal ">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>National Id:</label>
+                            <input type="text" required name="national_id" placeholder="National Id" class="form-control teal ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>First Name:</label>
+                            <input type="text" required name="first_name" placeholder="First Name" class="form-control teal ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Last Name:</label>
+                            <input type="text" required name="last_name" placeholder="Last Name" class="form-control teal ">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Date Of Birth:</label>
+                            <input type="date" required name="dob" placeholder="Birth Date" class="form-control teal ">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Nickname:</label>
+                            <input type="text" required name="nickname" placeholder="Nickname" class="form-control teal ">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Phone Number:</label>
+                            <input type="text" required name="phone_number" placeholder="Phone Number" class="form-control teal ">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Alt Phone Number:</label>
+                            <input type="text"  name="alt_phone_number" placeholder="Alt Phone" class="form-control teal ">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <select name="gender" required data-placeholder="Select Gender" class="form-control  form-control-select2"
+                                data-fouc>
+                                <option></option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Marital status:</label>
+                            <select name="marital_status" required data-placeholder="Select Marital Status" class="form-control  form-control-select2"
+                                data-fouc>
+                                <option></option>
+                                <option value="Maried">Maried</option>
+                                <option value="Single">Single</option>
+                                <option value="Widow">Widow</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Next of kin name:</label>
+                            <input type="text" required name="next_of_kin_name" placeholder="Next of kin name" class="form-control teal ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>next_of_kin_id:</label>
+                            <input type="text" name="next_of_kin_id" placeholder="next_of_kin_id" class="form-control teal ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>next_of_kin_relationship:</label>
+                            <input type="text" name="next_of_kin_relationship" placeholder="next_of_kin_relationship" class="form-control teal ">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <h6>Location</h6>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Address: <span class="text-danger">*</span></label>
+                            <input type="text" required name="address" placeholder="address" class="form-control ">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>non_schooling: <span class="text-danger">*</span></label>
+                            <input type="number" value="0" name="non_schooling" placeholder="non_schooling" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>primary_dependants: <span class="text-danger">*</span></label>
+                            <input type="number" value="0" name="primary_dependants" placeholder="primary_dependants" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>secondary_dependants: <span class="text-danger">*</span></label>
+                            <input type="number" value="0" name="secondary_dependants" placeholder="secondary_dependants" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>tertiary_dependants: <span class="text-danger">*</span></label>
+                            <input type="number" value="0" name="tertiary_dependants" placeholder="tertiary_dependants" class="form-control ">
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>working status: <span class="text-danger">*</span></label>
+                            <select name="working_status" data-placeholder="Working status" class="form-control  form-control-select2" data-fouc>
+                                <option></option>
+                                <option value="Employee">Employee</option>
+                                <option value="Owner">Owner</option>
+                                <option value="Student">Student</option>
+                                <option value="Unemployed">Unemployed</option>
+                                <option value="Other">Other</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>bussiness address: <span class="text-danger">*</span></label>
+                            <input type="text" required name="bussiness_address" placeholder="bussiness_address" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>bussiness location: <span class="text-danger">*</span></label>
+                            <input type="text" required name="bussiness_location" placeholder="bussiness_location" class="form-control ">
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>residence town: <span class="text-danger">*</span></label>
+                            <input type="text" required name="residence_town" placeholder="residence_town" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>estimate building: <span class="text-danger">*</span></label>
+                            <input type="text" required name="estimate_building" placeholder="estimate_building" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>street house number: <span class="text-danger">*</span></label>
+                            <input type="text" required name="street_house_number" placeholder="street_house_number" class="form-control ">
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>bussiness age: <span class="text-danger">*</span></label>
+                            <input type="text" required name="bussiness_age" placeholder="bussiness_age" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>bussiness type: <span class="text-danger">*</span></label>
+                            <select name="bussiness_type" data-placeholder="Bussiness Type" class="form-control  form-control-select2" data-fouc>
+                                <option></option>
+                                <option value="Trade">Trade</option>
+                                <option value="Service">Service</option>
+                                <option value="Manufacturer">Manufacturer</option>
+                                <option value="Farming">Farming</option>
+                                <option value="Agri-Bussiness">Agri-Bussiness</option>
+                                <option value="Other">Other</option>
+                            </select>
+
+                        </div>
+                    </div>                
+                </div>
+            </fieldset>
+
+            <h6>Financials</h6>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>loan security: <span class="text-danger">*</span></label>
+                            <input type="text" required name="loan_security" placeholder="loan_security" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>loan officer: <span class="text-danger">*</span></label>
+                            {{form.loan_officer}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>loan collection officer: <span class="text-danger">*</span></label>
+                            {{form.loan_collection_officer}}
+                        </div>
+                    </div>
+                
+                </div>
+                <h6>Bussiness Profitability</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>good day: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name= "good_day" class="form-control" placeholder="Good Day">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>bad_day: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name="bad_day" class="form-control" placeholder="Bad Day">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>days_per_week: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name="days_per_week" class="form-control" placeholder="days_per_week">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>stock purchase: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name="stock_purchase" class="form-control" placeholder="Stock Purchase">
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>transport: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name="transport" class="form-control" placeholder="transport">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>rent: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name="rent" class="form-control" placeholder="rent">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>salary: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name="salary" class="form-control" placeholder="salary">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>other expenses: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-prepend">
+                                    <span class="input-group-text">Ksh</span>
+                                </span>
+                                <input type="number" value="0" name="other_expenses" class="form-control" placeholder="other_expenses">
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+
+                <h6>Files</h6>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Front Id Card: <span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <input type="file" name="front_id_image" class="file-input" data-fouc>
+                                <span class="form-text text-muted">
+                                    Upload Image of the Front side of the clients Id Card
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Back Id Card: <span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <input type="file" name="back_id_image" class="file-input" data-fouc>
+                                <span class="form-text text-muted">
+                                    Upload Image of the Back side of the clients Id Card
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Additional files: <span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <input type="file" name="files" class="file-input" data-fouc>
+                                <span class="form-text text-muted">
+                                    Upload any files neccesary.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                   
+                
+                </div>
+
+
+            </fieldset>
+
+            <h6>Map</h6>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="text" name="map_address" value="" id="address" style="visibility:hidden;" />
+                            <input type="text" name="latitude" value="" id="latitude" style="visibility:hidden;" />
+                            <input type="text" name="longitude" value="" id="longitude" style="visibility:hidden;" />
+                            <center>
+                                <h6 style="font-weight: 600;"><i class="icon-location4"></i> Select Position Using the Red Marker</h6>
+                            </center>
+                            <hr>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                            
+                                    <div id="map" style="height:500px;">
+                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% block scripts %}
+
+<script>
+    $('#myform').on('submit', function (event) { 
+        document.getElementsByClassName('finishbtn')[0].classList.add('disabled')
+        document.getElementsByClassName('finishbtn')[0].innerHTML="saving..."
+       
+    });
+</script>
+
+
+<script>
+    var geocoder = new google.maps.Geocoder();
+
+    $(function () {
+
+        initialize_map();
+    });
+
+
+    function geocodePosition(pos) {
+        geocoder.geocode({
+            latLng: pos
+        }, function (responses) {
+            if (responses && responses.length > 0) {
+                updateMarkerAddress(responses[0].formatted_address);
+            } else {
+                updateMarkerAddress('Cannot determine address at this location.');
+            }
+        });
+    }
+
+    function updateMarkerPosition(latlng) {
+        $('#latitude').val(latlng.lat());
+        $('#longitude').val(latlng.lng());
+    }
+
+    function updateMarkerAddress(str) {
+        document.getElementById('address').value = str;
+    }
+
+    function initialize_map() {
+        var lat_value = document.getElementById('latitude').value;
+        var long_value = document.getElementById('longitude').value;
+
+        if (lat_value == '0' || lat_value == "") {
+            var lat_value = -1.303209;
+        }
+
+        if (long_value == "0" || long_value == "") {
+            var long_value = 36.8473969;
+        }
+
+        var latlng = new google.maps.LatLng(lat_value, long_value);
+        var myOptions = {
+            zoom: 14,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(document.getElementById("map"), myOptions);
+        marker = new google.maps.Marker({
+            position: latlng,
+            title: 'Nairobi ,Kenya',
+            map: map,
+            draggable: true,
+
+        });
+
+        geocodePosition(latlng);
+
+        google.maps.event.addListener(marker, 'drag', function () {
+            updateMarkerPosition(marker.getPosition());
+        });
+
+        google.maps.event.addListener(marker, 'dragend', function () {
+            geocodePosition(marker.getPosition());
+        });
+
+    }
+</script>
+{% endblock scripts %}
+
+{% endblock body %}

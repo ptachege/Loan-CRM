@@ -1,0 +1,474 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% block header %}
+<!-- <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js '%}"></script> -->
+<!-- <script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js '%}"></script> -->
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/selects/select2.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/uniform.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/demo_pages/form_layouts.js '%}"></script>
+
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="alert alert-dark">
+                <h6><i class="icon-info22"></i> Please Confirm the Details below before filling in the form.</h6>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            {% if all_associated_avatars %}        
+                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+        
+                                    {% for avatar in all_associated_avatars %}
+        
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="{{forloop.counter0}}" class="
+        																{% if forloop.counter0 == 0 %}
+        																active																	
+        																{% endif %}
+        																	"></li>
+                                    {% endfor %}
+        
+                                </ol>
+                                <div class="carousel-inner">
+                                    {% for avatar in all_associated_avatars %}
+                                    <div class="carousel-item {% if forloop.counter0 == 0 %}
+        																active																	
+        																{% endif %}">
+                                        <img src="{{avatar.image.url}}" class="d-block w-100" alt="...">
+                                    </div>
+                                    {% endfor %}
+        
+                                </div>
+                                <a class="carousel-control-prev" style="color: black!important;"
+                                    href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                    <i class="icon-arrow-left15"></i>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" style="color: black!important;"
+                                    href="#carouselExampleIndicators" role="button" data-slide="next">
+                                    <i class="icon-arrow-right15"></i>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                            {% else %}        
+                            <img src="{% static 'Loanapp/images/user.png' %} " class="img-fluid user-img " />     
+                            {% endif %}
+                        </div>
+                        <div     class="col-md-7">
+                            <div class="container-fluid">
+                                <table class="ml-4">
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>First Name:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">{{borrower.first_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>Last Name:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">{{borrower.last_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>nickname:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">{{borrower.nickname}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>Branch:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">{{borrower.branch}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>walaka id:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">{{borrower.walaka_id}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>dob:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">{{borrower.dob}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>national_id:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">{{borrower.national_id}}</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td style="padding-bottom: 10px;"><b>M-Fee:</b></td>
+                                        <td style="padding-bottom: 10px;" class="pl-4">
+        
+                                            {% if borrower.paid_membership_fee %}
+                                            <span class="badge badge-success">
+                                                Paid
+                                            </span>
+                                            {% else %}
+                                            <span class="badge badge-danger">
+                                                Pending
+                                            </span>
+                                            {% endif %}
+        
+                                        </td>
+                                    </tr>
+        
+                                </table>
+                                <a href="{% url 'Loanapp:detail_borrower' borrower.id %}" target="_blank" class="btn btn-outline-dark btn-sm my-2 ml-4" style="border-radius: 5px;">
+                                    <i class="icon-eye4 mr-1"></i> View profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12 align-items-left">
+                        <table class="ml-4">
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-phone mr-1"></i> disbursment Number:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.disbursment_number}}</td>
+                            </tr>
+        
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-phone mr-1"></i>
+                                        phone_number:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.phone_number}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-phone mr-1"></i>
+                                        alt_phone_number:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.alt_phone_number}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-arrow-right15 mr-1"></i>
+                                        gender:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.gender}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-arrow-right15 mr-1"></i>
+                                        marital_status:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.marital_status}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-arrow-right15 mr-1"></i>
+                                        next_of_kin_name:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.next_of_kin_name}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-arrow-right15 mr-1"></i>
+                                        next_of_kin_id:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.next_of_kin_id}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-arrow-right15 mr-1"></i>
+                                        kin_relationship:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">{{borrower.next_of_kin_relationship}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-user mr-1"></i>
+                                        Loan Officer:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">
+                                    <a href="
+        															{% if role == 'Admin' %}
+        																{% url 'Loanapp:detail_officer' borrower.loan_officer.id %}																
+        															{% else %}
+        															#
+        															{% endif %}
+        																"><span class="badge badge-primary">{{borrower.loan_officer}}</span></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px;"><b>
+                                        <i class="icon-user mr-1"></i>
+                                        Loan Collection Officer:</b></td>
+                                <td style="padding-bottom: 10px;" class="pl-4">
+                                    <a href="
+        																{% if role == 'Admin' %}
+        																{% url 'Loanapp:detail_officer' borrower.loan_collection_officer.id %}																
+        																	{% else %}
+        																	#
+        																	{% endif %}
+        																"><span class="badge badge-warning">{{borrower.loan_collection_officer}}</span></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 text-center">
+            <div class="alert alert-dark">
+                <h6><i class="icon-pencil5"></i> Fill in the form below correctly.</h6>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="card" style="border-left: solid 3px teal;">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <form action="{% url 'Loanapp:apply_loan_form' borrower.id %}" id="myform" method="POST" enctype="multipart/form-data" >
+                            {% csrf_token %}
+                            <fieldset>
+                                <legend class="font-weight-semibold" style="font-size: 20px;"><i
+                                        class="icon-plus-circle2 mr-2" style="font-size: 20px;"></i> Apply For Loan.
+                                </legend>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Loan Type:</label>
+                                            <select name="loan_type" required data-placeholder="Select Loan Type" class="form-control  form-control-select2" data-fouc>
+                                                <option></option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Item">Item</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Expected Amount:</label>
+                                            <div class="input-group">
+                                                <span class="input-group-prepend">
+                                                    <span class="input-group-text">Ksh</span>
+                                                </span>
+                                                <input onchange="calculateEMI()" id="loan_amount" type="number" required name="expected_amount" class="form-control" placeholder="10,000">
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Period:</label>
+                                            <div class="input-group">
+                                                <span class="input-group-prepend">
+                                                    <span class="input-group-text">days</span>
+                                                </span>
+                                                <input id="period" onchange="calculateEMI()" value="30" type="number" required name="period" class="form-control" placeholder="e.g 10 days">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>payment type:</label>
+                                            <select id="plan" onchange="calculateInstallments()" name="plan" required data-placeholder="Select Payment Type" class="form-control  form-control-select2" data-fouc>
+                                                <option></option>
+                                                <option value="Daily">Daily</option>
+                                                <option value="Weekly">Weekly</option>
+                                                <option value="Monthly">30 Days</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Loan Purpose 1:</label>
+                                            <input type="text" required name="loan_purpose1" placeholder="optional" class="form-control">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Loan Purpose 2:</label>
+                                            <input type="text" name="loan_purpose2" placeholder="optional" class="form-control">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Loan Purpose 3:</label>
+                                            <input type="text" name="loan_purpose3" placeholder="optional" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Loan Purpose 4:</label>
+                                            <input type="text" name="loan_purpose4" placeholder="optional" class="form-control">
+                                        </div>
+                                    </div>
+                                   
+
+
+                                </div>
+
+                                <div class="text-right">
+                                    <button type="submit" id="registerofficer" class="btn btn-primary">Submit Application <i
+                                            class="icon-paperplane ml-2"></i></button>
+                                </div>
+
+
+                            </fieldset>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+                    <h5 class="card-title"><i class="icon-cash"></i> &nbsp;Loan Calculator</h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" data-action="collapse"></a>
+                            <a class="list-icons-item" data-action="reload"></a>
+                            <a class="list-icons-item" data-action="remove"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card cardblur my-2">
+                <div class="card-body">
+                   <div class="table-responsive">
+                        <table class="table">
+                            <div class="tbody">
+                                <tr>
+                                    <td style="padding-bottom: 10px;"><b>Interest Rate:</b></td>
+                                    <td style="padding-bottom: 10px;" id="interest_rate" class="pl-4">0</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 10px;"><b>Interest (Ksh):</b></td>
+                                    <td id="interest" style="padding-bottom: 10px;" class="pl-4">0</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Principal Amount:</b></td>
+                                    <td class="pl-4" id="principal_amount">0</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Expected Installments:</b></td>
+                                    <td class="pl-4" id="exp_installments">0</td>
+                                </tr>
+                            </div>
+                        </table>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block script%}
+    <script>
+        $('#myform').on('submit', function (event) {
+            document.getElementById('registerofficer').setAttribute('disabled', true)
+            document.getElementById('registerofficer').innerHTML = "saving..."
+
+        });
+    </script>
+
+    <script>
+        function calculateInstallments(){
+            if($("#plan").val() != ''){
+                var period = document.getElementById('period').value
+                if($("#plan").val() == "Daily"){
+                
+                
+                    document.getElementById('exp_installments').innerHTML = period
+
+                }else if($("#plan").val() == "Weekly"){
+                    var weekly_inst = Math.floor(Number(period) / 7)
+                    document.getElementById('exp_installments').innerHTML = weekly_inst
+
+                } else if($("#plan").val() == "Monthly"){
+                     var weekly_inst = Math.ceil(Number(period) / 30)
+                    document.getElementById('exp_installments').innerHTML = weekly_inst
+                }
+            }
+        }
+        function calculateEMI() {
+
+            calculateInstallments()
+
+            
+
+            var loan_percent = document.getElementById('interest_rate');
+            // if (!loan_percent)
+            //     loan_percent = '0';
+
+            var loan_amount = document.getElementById('loan_amount').value;
+            // if (!loan_amount)
+            //     loan_amount = '0';
+
+
+            var period = document.getElementById('period').value
+
+            if (period > 30) {
+                return alert("The period must be 30 days or less");
+            } else
+                if (!period) {
+                    period = '1';
+                } else if (period <= 12) {
+                    document.getElementById('interest_rate').innerHTML = parseInt(12) + ' %';
+                    var interest = loan_amount * 0.12;
+                    var total = parseFloat(loan_amount) + parseFloat(interest);
+
+                    // var total = loan_amount+((loan_amount*(12/100)*period)); 
+                    document.getElementById('principal_amount').innerHTML = parseFloat(total).toFixed(2);
+                    document.getElementById('interest').innerHTML = parseFloat((interest)).toFixed(2);
+
+
+                }
+                //calculate for 12 days or more upto 30 days
+                else if (period >= 12) {
+
+
+                    var interest = loan_amount * (period / 100);
+                    var total = parseFloat(loan_amount) + parseFloat(interest);
+
+                    document.getElementById('interest_rate').innerHTML = parseInt(period) + ' %';
+                    //  var total = loan_amount+((loan_amount*(period/100)*period)); 
+                    document.getElementById('principal_amount').innerHTML = parseFloat(total).toFixed(2);
+                    document.getElementById('interest').innerHTML = parseFloat((interest)).toFixed(2);
+
+                }
+            //Throw an alert if loan period is more than 30
+
+
+
+
+
+            var loan_amount = parseFloat(loan_amount);
+            var loan_percent = parseFloat(loan_percent);
+            var installments = parseFloat(installments);
+            var period = parseFloat(period);
+
+
+        }
+    </script>
+
+    <script src="{% static 'Loanapp/vanilla-tilt.js' %}"></script>
+    <script type="text/javascript">
+        VanillaTilt.init(document.querySelector(".cardblur"), {
+            max: 25,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.1,
+        });
+    </script>
+
+</div>
+{%endblock script%}
+{% endblock body %}

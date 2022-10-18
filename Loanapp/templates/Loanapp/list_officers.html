@@ -1,0 +1,241 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js' %}"></script> -->
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="card my-4">
+                <div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+                    <h5 class="card-title"><i class="icon-user-tie"></i> &nbsp;All Officers</h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" data-action="collapse"></a>
+                            <a class="list-icons-item" data-action="reload"></a>
+                            <a class="list-icons-item" data-action="remove"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card my-3">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-tabs-bottom border-bottom-0 nav-justified">
+                        <li class="nav-item"><a href="#bottom-justified-divided-tab1" class="nav-link active" data-toggle="tab"><i
+                                    class="icon-users mr-2"></i> Loan Officers</a></li>
+                        <li class="nav-item"><a href="#bottom-justified-divided-tab2" class="nav-link" data-toggle="tab"> <i
+                                    class="icon-user-tie mr-2"></i> Loan Collection Officers</a></li>
+                        <li class="nav-item"><a href="#bottom-justified-divided-tab3" class="nav-link" data-toggle="tab"> <i
+                                    class="icon-users mr-2"></i> Loan Verification Officers</a></li>
+                        <li class="nav-item"><a href="#bottom-justified-divided-tab4" class="nav-link" data-toggle="tab"> <i
+                                    class="icon-user mr-2"></i> Admins</a></li>
+                    </ul>
+            
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="bottom-justified-divided-tab1">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><b>#</b></th>
+                                            <th><b>First Name</b></th>
+                                            <th><b>Last Name</b></th>
+                                            <th><b>Branch</b></th>
+                                            <th><b>Role</b></th>
+                                            <th><b>Action</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                
+                                        {% for officer in loan_officers %}
+                                
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{officer.first_name}}</td>
+                                            <td>{{officer.last_name}}</td>
+                                            <td>{{officer.branch}}</td>
+                                            <td>{{officer.role}}</td>
+                                            <td>
+                                                <a href="{% url 'Loanapp:detail_officer' officer.id %}">
+                                                    <i class="icon-eye4" style="color:black;"></i>
+                                                </a>
+                                                <!-- <a href="" style="margin-left: 10px;">
+                                                                            <i class="icon-bin" style="color:red; font-size: 16px;"></i>
+                                                                        </a> -->
+                                            </td>
+                                        </tr>
+                                
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4">
+                                                <h6>No officer record found.</h6>
+                                            </td>
+                                        </tr>
+                                
+                                        {% endfor %}
+                                
+                                    </tbody>
+                                </table>
+                            </div>
+            
+                        </div>
+            
+                        <div class="tab-pane fade" id="bottom-justified-divided-tab2">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><b>#</b></th>
+                                            <th><b>First Name</b></th>
+                                            <th><b>Last Name</b></th>
+                                            <th><b>Branch</b></th>
+                                            <th><b>Role</b></th>
+                                            <th><b>Action</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                
+                                        {% for officer in loan_collection_officers %}
+                                
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{officer.first_name}}</td>
+                                            <td>{{officer.last_name}}</td>
+                                            <td>{{officer.branch}}</td>
+                                            <td>{{officer.role}}</td>
+                                            <td>
+                                                <a href="{% url 'Loanapp:detail_officer' officer.id %}">
+                                                    <i class="icon-eye4" style="color:black;"></i>
+                                                </a>
+                                                <!-- <a href="" style="margin-left: 10px;">
+                                                                                                            <i class="icon-bin" style="color:red; font-size: 16px;"></i>
+                                                                                                        </a> -->
+                                            </td>
+                                        </tr>
+                                
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4">
+                                                <h6>No officer record found.</h6>
+                                            </td>
+                                        </tr>
+                                
+                                        {% endfor %}
+                                
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="bottom-justified-divided-tab3">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><b>#</b></th>
+                                            <th><b>First Name</b></th>
+                                            <th><b>Last Name</b></th>
+                                            <th><b>Branch</b></th>
+                                            <th><b>Role</b></th>
+                                            <th><b>Action</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                
+                                        {% for officer in loan_verification_officers %}
+                                
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{officer.first_name}}</td>
+                                            <td>{{officer.last_name}}</td>
+                                            <td>{{officer.branch}}</td>
+                                            <td>{{officer.role}}</td>
+                                            <td>
+                                                <a href="{% url 'Loanapp:detail_officer' officer.id %}">
+                                                    <i class="icon-eye4" style="color:black;"></i>
+                                                </a>
+                                                <!-- <a href="" style="margin-left: 10px;">
+                                                                                                            <i class="icon-bin" style="color:red; font-size: 16px;"></i>
+                                                                                                        </a> -->
+                                            </td>
+                                        </tr>
+                                
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4">
+                                                <h6>No officer record found.</h6>
+                                            </td>
+                                        </tr>
+                                
+                                        {% endfor %}
+                                
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="bottom-justified-divided-tab4">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><b>#</b></th>
+                                            <th><b>First Name</b></th>
+                                            <th><b>Last Name</b></th>
+                                            <th><b>Branch</b></th>
+                                            <th><b>Role</b></th>
+                                            <th><b>Action</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                
+                                        {% for officer in admin %}
+                                
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{officer.first_name}}</td>
+                                            <td>{{officer.last_name}}</td>
+                                            <td>{{officer.branch}}</td>
+                                            <td>{{officer.role}}</td>
+                                            <td>
+                                                <a href="{% url 'Loanapp:detail_officer' officer.id %}">
+                                                    <i class="icon-eye4" style="color:black;"></i>
+                                                </a>
+                                                <!-- <a href="" style="margin-left: 10px;">
+                                                                                                            <i class="icon-bin" style="color:red; font-size: 16px;"></i>
+                                                                                                        </a> -->
+                                            </td>
+                                        </tr>
+                                
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4">
+                                                <h6>No officer record found.</h6>
+                                            </td>
+                                        </tr>
+                                
+                                        {% endfor %}
+                                
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+
+    </div>
+</div>
+{% block scripts %}
+{% endblock scripts %}
+
+{% endblock body %}

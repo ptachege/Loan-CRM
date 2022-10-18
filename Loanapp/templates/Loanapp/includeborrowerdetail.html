@@ -1,0 +1,910 @@
+
+{% load static %}
+{% load humanize %}
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header header-elements-inline">
+                        <!-- <h6 class="card-title text-muted"><small> Chose between the below tabs </small></h6> -->
+                        <div class="header-elements">
+            
+                        </div>
+                    </div>
+            
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                            <li class="nav-item"><a href="#basic_info" class="nav-link active" data-toggle="tab">Basic Info <i
+                                        class="icon-user ml-2"></i></a></li>
+                            <li class="nav-item"><a href="#location" class="nav-link" data-toggle="tab">
+                                    Location
+                                    <i class="icon-pin ml-2"></i></a></li>
+                            <li class="nav-item"><a href="#bussiness" class="nav-link" data-toggle="tab">
+                                    Bussiness
+                                    <i class="icon-cash ml-2"></i></a></li>
+                            <li class="nav-item"><a href="#relations" class="nav-link" data-toggle="tab">
+                                    Relations
+                                    <i class="icon-attachment ml-2"></i></a></li>
+            
+                        </ul>
+            
+                        <div class="tab-content">
+                            <!-- basic info -->
+                            <div class="tab-pane fade show active" id="basic_info">
+            
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+            
+                                                        {% if all_associated_avatars %}
+            
+                                                        <div id="carouselExampleIndicators" class="carousel slide"
+                                                            data-ride="carousel">
+                                                            <ol class="carousel-indicators">
+            
+                                                                {% for avatar in all_associated_avatars %}
+            
+                                                                <li data-target="#carouselExampleIndicators"
+                                                                    data-slide-to="{{forloop.counter0}}" class="
+            																{% if forloop.counter0 == 0 %}
+            																active																	
+            																{% endif %}
+            																	"></li>
+                                                                {% endfor %}
+            
+                                                            </ol>
+                                                            <div class="carousel-inner">
+                                                                {% for avatar in all_associated_avatars %}
+                                                                <div class="carousel-item {% if forloop.counter0 == 0 %}
+            																active																	
+            																{% endif %}">
+                                                                    <img src="{{avatar.image.url}}" class="d-block w-100" alt="...">
+                                                                </div>
+                                                                {% endfor %}
+            
+                                                            </div>
+                                                            <a class="carousel-control-prev" style="color: black!important;"
+                                                                href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                                                <i class="icon-arrow-left15"></i>
+                                                                <span class="sr-only">Previous</span>
+                                                            </a>
+                                                            <a class="carousel-control-next" style="color: black!important;"
+                                                                href="#carouselExampleIndicators" role="button" data-slide="next">
+                                                                <i class="icon-arrow-right15"></i>
+                                                                <span class="sr-only">Next</span>
+                                                            </a>
+                                                        </div>
+                                                        {% else %}
+            
+                                                        <img src="{% static 'Loanapp/images/user.png' %} "
+                                                            class="img-fluid user-img " />
+                                                        <div class="text-center">
+                                                            <a href="{% url 'Loanapp:additional_info' borrower.id %}"
+                                                                class=" my-3 btn btn-outline-dark">
+                                                                Upload Profile
+                                                            </a>
+                                                        </div>
+            
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <div class="container-fluid">
+                                                            <table class="ml-4">
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>First Name:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+                                                                        {{borrower.first_name}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>Last Name:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+                                                                        {{borrower.last_name}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>nickname:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+                                                                        {{borrower.nickname}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>Branch:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+                                                                        {{borrower.branch}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>walaka id:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+                                                                        {{borrower.walaka_id}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>dob:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">{{borrower.dob}}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>national_id:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+                                                                        {{borrower.national_id}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>address:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+                                                                        {{borrower.address}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding-bottom: 10px;"><b>M-Fee:</b></td>
+                                                                    <td style="padding-bottom: 10px;" class="pl-4">
+            
+                                                                        {% if borrower.paid_membership_fee %}
+                                                                        <span class="badge badge-success">
+                                                                            Paid
+                                                                        </span>
+                                                                        {% else %}
+                                                                        <span class="badge badge-danger">
+                                                                            Pending
+                                                                        </span>
+                                                                        {% endif %}
+            
+                                                                    </td>
+                                                                </tr>
+            
+                                                            </table>
+
+                                                            
+                                                            {% if request.user.userprofiles.role == "Admin" %}
+                                                                
+                                                            
+                                                            <a href="#" class="btn btn-outline-dark btn-sm my-2 ml-4"
+                                                            style="border-radius: 5px;">
+                                                            <i class="icon-pencil5 mr-1"></i> Edit profile</a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="col-md-12 align-items-left">
+                                                    <table class="ml-4">
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-phone mr-1"></i> disbursment Number:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.disbursment_number}}</td>
+                                                        </tr>
+            
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-phone mr-1"></i>
+                                                                    phone_number:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">{{borrower.phone_number}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-phone mr-1"></i>
+                                                                    alt_phone_number:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.alt_phone_number}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    gender:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">{{borrower.gender}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    marital_status:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.marital_status}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    next_of_kin_name:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.next_of_kin_name}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    next_of_kin_id:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.next_of_kin_id}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    kin_relationship:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.next_of_kin_relationship}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-user mr-1"></i>
+                                                                    Loan Officer:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                <a href="
+            															{% if role == 'Admin' %}
+            																{% url 'Loanapp:detail_officer' borrower.loan_officer.id %}																
+            															{% else %}
+            															#
+            															{% endif %}
+            																"><span class="badge badge-primary">{{borrower.loan_officer}}</span></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-user mr-1"></i>
+                                                                    Loan Collection Officer:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                <a href="
+            																{% if role == 'Admin' %}
+            																{% url 'Loanapp:detail_officer' borrower.loan_collection_officer.id %}																
+            																	{% else %}
+            																	#
+            																	{% endif %}
+            																"><span class="badge badge-warning">{{borrower.loan_collection_officer}}</span></a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="col-md-12">
+                                        <div class="card my-3">
+                                            <div class="card-body">
+                                                <ul class="nav nav-tabs nav-tabs-bottom border-bottom-0 nav-justified">
+                                                    <li class="nav-item"><a href="#bottom-justified-divided-tab1"
+                                                            class="nav-link active" data-toggle="tab"><i
+                                                                class="icon-files-empty2 mr-2"></i> Active Loans</a></li>
+                                                    <li class="nav-item"><a href="#bottom-justified-divided-tab2" class="nav-link"
+                                                            data-toggle="tab"> <i class="icon-books mr-2"></i> Loan History</a></li>
+                                                </ul>
+            
+                                                <div class="tab-content">
+                                                    <div class="tab-pane fade show active" id="bottom-justified-divided-tab1">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><b>#</b></th>
+                                                                        <th><b>Loan Type</b></th>
+                                                                        <th><b>Expected Amount</b></th>
+                                                                        <th><b>Interest Rate</b></th>
+                                                                        <th><b>Period</b></th>
+                                                                        <th><b>total loan</b></th>
+                                                                        <th><b>Payment Plan</b></th>
+                                                                        <th><b>status</b></th>
+                                                                        <th><b>Action</b></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+            
+                                                                    {% for loan in active_loan %}
+            
+                                                                    <tr>
+                                                                        <td>{{forloop.counter}}</td>
+                                                                        <td> {{loan.loan_type}}</td>
+                                                                        <td>Ksh {{loan.expected_amount |intcomma}}</td>
+                                                                        <td>{{loan.loan_percentage}}%</td>
+                                                                        <td>{{loan.period}} days</td>
+                                                                        <td>Ksh {{loan.total_loan|intcomma}}</td>
+                                                                        <td>{{loan.payment_type}}</td>
+                                                                        <td>
+            
+                                                                            {% if loan.status == "NEW" %}
+                                                                            <span class="badge badge-primary">
+            
+                                                                            </span>
+                                                                            {% else %}
+            
+            
+                                                                            {% if loan.status == "APPROVED" %}
+            
+                                                                            <span class="badge badge-warning">
+                                                                                Approved
+                                                                            </span>
+            
+                                                                            {% else %}
+            
+            
+            
+                                                                            {% if loan.status == "DENIED" %}
+            
+                                                                            <span class="badge badge-danger">
+                                                                                Denied
+                                                                            </span>
+            
+                                                                            {% else %}
+            
+            
+                                                                            {% if loan.status == "DISBURSED" %}
+            
+                                                                            <span class="badge badge-dark">
+                                                                                Active
+                                                                            </span>
+            
+                                                                            {% else %}
+                                                                            <span class="badge badge-success">
+                                                                                Fully Paid
+                                                                            </span>
+            
+                                                                            {% endif %}
+            
+            
+                                                                            {% endif %}
+            
+            
+            
+                                                                            {% endif %}
+            
+            
+                                                                            {% endif %}
+            
+                                                                        </td>
+                                                                        <td>
+            
+                                                                            <a href="">
+                                                                                <i class="icon-eye4 ml-2" style="color:black;"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+            
+                                                                    {% empty %}
+                                                                    <tr>
+                                                                        <td colspan="9">
+                                                                            <div class="alert alert-warning text-center">
+                                                                                <p>
+                                                                                    <i class="icon-warning mr-3"></i>
+                                                                                    {{borrower}} doesn't have an active loan
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+            
+            
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+            
+                                                    </div>
+            
+                                                    <div class="tab-pane fade" id="bottom-justified-divided-tab2">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><b>#</b></th>
+                                                                        <th><b>Loan Type</b></th>
+                                                                        <th><b>Expected Amount</b></th>
+                                                                        <th><b>Interest Rate</b></th>
+                                                                        <th><b>Period</b></th>
+                                                                        <th><b>total loan</b></th>
+                                                                        <th><b>Payment Plan</b></th>
+                                                                        <th><b>status</b></th>
+                                                                        <th><b>Action</b></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+            
+                                                                    {% for loan in all_loan_history %}
+            
+                                                                    <tr>
+                                                                        <td>{{forloop.counter}}</td>
+                                                                        <td> {{loan.loan_type}}</td>
+                                                                        <td>Ksh {{loan.expected_amount |intcomma}}</td>
+                                                                        <td>{{loan.loan_percentage}}%</td>
+                                                                        <td>{{loan.period}} days</td>
+                                                                        <td>Ksh {{loan.total_loan|intcomma}}</td>
+                                                                        <td>{{loan.payment_type}}</td>
+                                                                        <td>
+            
+                                                                            {% if loan.status == "NEW" %}
+                                                                            <span class="badge badge-primary">
+            
+                                                                            </span>
+                                                                            {% else %}
+            
+            
+                                                                            {% if loan.status == "APPROVED" %}
+            
+                                                                            <span class="badge badge-warning">
+                                                                                Approved
+                                                                            </span>
+            
+                                                                            {% else %}
+            
+            
+            
+                                                                            {% if loan.status == "DENIED" %}
+            
+                                                                            <span class="badge badge-danger">
+                                                                                Denied
+                                                                            </span>
+            
+                                                                            {% else %}
+            
+            
+                                                                            {% if loan.status == "DISBURSED" %}
+            
+                                                                            <span class="badge badge-dark">
+                                                                                Active
+                                                                            </span>
+            
+                                                                            {% else %}
+                                                                            <span class="badge badge-success">
+                                                                                Fully Paid
+                                                                            </span>
+            
+                                                                            {% endif %}
+            
+            
+                                                                            {% endif %}
+            
+            
+            
+                                                                            {% endif %}
+            
+            
+                                                                            {% endif %}
+            
+                                                                        </td>
+                                                                        <td>
+            
+                                                                            <a href="">
+                                                                                <i class="icon-eye4 ml-2" style="color:black;"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+            
+                                                                    {% empty %}
+                                                                    <tr>
+                                                                        <td colspan="9">
+                                                                            <div class="alert alert-warning text-center">
+                                                                                <p>
+                                                                                    <i class="icon-warning mr-3"></i> No registered
+                                                                                    Invoices genrated.
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+            
+            
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <input type="hidden" id="lat" value="{{borrower.latitude}}">
+                            <input type="hidden" id="long" value="{{borrower.longitude}}">
+                            <!-- location -->
+            
+                            <div class="tab-pane fade" id="location">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div id="map" style="height:500px;">
+            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                            </div>
+                            <!-- bussiness -->
+            
+                            <div class="tab-pane fade" id="bussiness">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card" style="border-left: solid 3px teal;">
+                                            <div class="card-body">
+                                                <center>
+                                                    <p class="text-muted">Dependants</p>
+                                                </center>
+                                                <div class="col-md-12 align-items-center">
+                                                    <table class="ml-4">
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i> non_schooling:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.non_schooling}}</td>
+                                                        </tr>
+            
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    primary_dependants:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.primary_dependants}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    secondary_dependants:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.secondary_dependants}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    tertiary_dependants:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.tertiary_dependants}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    Total Dependants:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">{{totaldependants}} </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    loan_security:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.loan_security}} </td>
+                                                        </tr>
+            
+            
+            
+                                                    </table>
+                                                </div>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <center>
+                                                    <p class="text-muted">Bussiness</p>
+                                                </center>
+                                                <div class="col-md-12 align-items-center">
+                                                    <table class="ml-4">
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i> working_status:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.working_status}}</td>
+                                                        </tr>
+            
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    bussiness_address:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.bussiness_address}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    bussiness_location:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.bussiness_location}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    residence_town:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.residence_town}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    estimate_building:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.estimate_building}} </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    street_house_number:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.street_house_number}} </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    bussiness_age:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.bussiness_age}} </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-arrow-right15 mr-1"></i>
+                                                                    bussiness_type:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.bussiness_type}} </td>
+                                                        </tr>
+            
+            
+            
+                                                    </table>
+                                                </div>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="col-md-12 text-center">
+                                        <div class="alert alert-info">
+                                            <h6>Bussiness Profitability</h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 text-left">
+                                        <div class="card" style="border-left: solid 3px teal;">
+                                            <div class="card-body">
+            
+                                                <div class="col-md-12 align-items-center">
+                                                    <table class="ml-4">
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i> Good Day:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">Ksh {{borrower.good_day|intcomma}}
+                                                            </td>
+                                                        </tr>
+            
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i>
+                                                                    Bad Day:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">Ksh {{borrower.bad_day}|intcomma}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i>
+                                                                    Days/Week:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">
+                                                                {{borrower.days_per_week}} days</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i>
+                                                                    Stock Purchase:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4"> Ksh
+                                                                {{borrower.stock_purchase|intcomma}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i>
+                                                                    Transport:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">Ksh
+                                                                {{borrower.transport|intcomma}} </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i>
+                                                                    Rent:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">Ksh {{borrower.rent|intcomma}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i>
+                                                                    Salary:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">Ksh {{borrower.salary|intcomma}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-bottom: 10px;"><b>
+                                                                    <i class="icon-checkbox-checked2 mr-1"></i>
+                                                                    Other Expenses:</b></td>
+                                                            <td style="padding-bottom: 10px;" class="pl-4">Ksh
+                                                                {{borrower.other_expenses|intcomma}} </td>
+                                                        </tr>
+            
+            
+                                                    </table>
+                                                </div>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 text-left">
+                                        <div class="card" style="border-left: solid 3px teal;">
+                                            <div class="card-body text-center">
+                                                <h4>Total: Ksh {{total_bussiness_profitability |intcomma}}</h4>
+            
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- relations -->
+            
+                            <div class="tab-pane fade" id="relations">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <span class="badge badge-warning">
+                                            Guarantors
+                                        </span>
+                                        <a href="" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#add_guarantor"
+                                            style="float: right;"><i class="icon-plus-circle2"></i> Add Guarantor</a>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>#</b></th>
+                                                        <th><b>Guarantor Name</b></th>
+                                                        <th><b>Guarantor Contact</b></th>
+                                                        <th><b>Relation</b></th>
+                                                        <th><b>Action</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+            
+                                                    {% for guarantor in all_associated_guarantors %}
+            
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>{{guarantor.guarantors_full_name}}</td>
+                                                        <td>{{guarantor.guarantors_contact}}</td>
+                                                        <td>{{guarantor.guarantors_relation}}</td>
+                                                        <td>
+                                                            <a href="#">
+                                                                <i class="icon-bin" style="color:red;"></i>
+                                                            </a>
+            
+                                                        </td>
+                                                    </tr>
+            
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <div class="alert alert-info text-center">
+                                                                <p>
+                                                                    <i class="icon-warning mr-3"></i> No Guarantor associated with
+                                                                    this borrower
+                                                                </p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+            
+                                                    {% endfor %}
+            
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <span class="badge badge-primary">
+                                            Referees
+                                        </span>
+                                        <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_referee"
+                                            style="float: right;"><i class="icon-plus-circle2"></i> Add Referee</a>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>#</b></th>
+                                                        <th><b>Refere Name</b></th>
+                                                        <th><b>Phone</b></th>
+                                                        <th><b>Relation</b></th>
+                                                        <th><b>Action</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+            
+                                                    {% for referee in all_associated_referee %}
+            
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>{{referee.referee_full_name}}</td>
+                                                        <td>{{referee.referee_contact}}</td>
+                                                        <td>{{referee.referee_relation}}</td>
+            
+                                                        <td>
+                                                            <a href="#">
+                                                                <i class="icon-bin" style="color:red;"></i>
+                                                            </a>
+            
+                                                        </td>
+                                                    </tr>
+            
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <div class="alert alert-warning text-center">
+                                                                <p>
+                                                                    <i class="icon-warning mr-3"></i> No Associated Referees for
+                                                                    this tenant.
+                                                                </p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+            
+                                                    {% endfor %}
+            
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <span class="badge badge-success">
+                                            Assets
+                                        </span>
+                                        <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_asset"
+                                            style="float: right;"><i class="icon-plus-circle2"></i> Add asset</a>
+            
+            
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>#</b></th>
+                                                        <th><b>Asset Name</b></th>
+                                                        <th><b>Value</b></th>
+                                                        <th><b>Description</b></th>
+                                                        <th><b>Action</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+            
+                                                    {% for asset in all_associated_assets %}
+            
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>{{asset.asset_full_name}}</td>
+                                                        <td>Ksh {{asset.value|intcomma}}</td>
+                                                        <td>{{asset.description}}</td>
+                                                        <td>
+                                                            <a href="">
+                                                                <i class="icon-bin" style="color:red;"></i>
+                                                            </a>
+            
+                                                        </td>
+                                                    </tr>
+            
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <div class="alert alert-warning text-center">
+                                                                <p>
+                                                                    <i class="icon-warning mr-3"></i> No Associated Assets for this
+                                                                    borrower.
+                                                                </p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+            
+                                                    {% endfor %}
+            
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

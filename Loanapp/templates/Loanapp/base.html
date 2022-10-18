@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Walaka Loan Management System</title>
+  {% load static %}
+  <link rel="shortcut icon" href="{% static 'Loanapp/images/house.png' %}">
+  <!-- Global stylesheets -->
+  <link href="{% static 'Loanapp/global_assets/css/icons/icomoon/styles.min.css ' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'Loanapp/assets/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'Loanapp/assets/css/bootstrap_limitless.min.css  '%}" rel="stylesheet" type="text/css">
+  <link href="{% static 'Loanapp/assets/css/layout.min.css'%}" rel="stylesheet" type="text/css">
+  <link href="{% static 'Loanapp/assets/css/components.min.css '%}" rel="stylesheet" type="text/css">
+  <link href="{% static 'Loanapp/assets/css/colors.min.css '%}" rel="stylesheet" type="text/css">
+  <link href="{% static 'Loanapp/fontawesome-free/css/all.css'%}" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- /global stylesheets -->
+
+  <!-- Core JS files -->
+  <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js'%}"></script>
+  <!-- /core JS files -->
+
+  <!-- Theme JS files -->
+  <script src="{% static 'Loanapp/global_assets/js/plugins/visualization/d3/d3.min.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/plugins/visualization/d3/d3_tooltip.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/switchery.min.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/plugins/ui/moment/moment.min.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/plugins/pickers/daterangepicker.js'%}"></script>
+
+  <script src="{% static 'Loanapp/assets/js/app.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/demo_pages/dashboard.js'%}"></script>
+  <script src="{% static 'Loanapp/global_assets/js/plugins/notifications/pnotify.min.js' %}"></script>
+
+  
+
+  
+    
+
+
+
+
+
+  {% block header %}
+
+  {% endblock header %}
+  <!-- /theme JS files -->
+
+  <style>
+    body {
+      padding-top: 65px;
+    }
+      ::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 20px;
+   height: 7px;    
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(192, 188, 188);
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* ::-webkit-scrollbar-thumb:horizontal{
+        height: 3px;
+    } */
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.btn-walaka {
+  background-color: #4A054A;
+  color:#fff;
+}
+.btn-walaka:hover {
+  background-color: #fff;
+  color:#4A054A;
+  border:solid 1px #4A054A;
+}
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Main navbar -->
+  <div class="navbar navbar-expand-md navbar-dark  fixed-top">
+    <div class="navbar-brand">
+      <a href="{% if request.user.is_authenticated %}
+			  /
+			{% else %}
+			{% url 'Loanapp:login_user' %}	
+			{% endif %}
+			" class="d-inline-block">
+        <i class="icon-home5 mr-2 mb-1" style="font-size: 25px;"></i> Walaka Capital
+      </a>
+    </div>
+
+    <div class="d-md-none">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
+        <i class="icon-tree5"></i>
+      </button>
+      <button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
+        <i class="icon-paragraph-justify3"></i>
+      </button>
+    </div>
+
+    <div class="collapse navbar-collapse " id="navbar-mobile">
+      <ul class="navbar-nav ml-md-3 mr-md-auto">
+        <li class="nav-item">
+          <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
+            <i class="icon-paragraph-justify3"></i>
+          </a>
+        </li>
+
+      </ul>
+
+
+      <ul class="navbar-nav">
+
+        <li class="nav-item">
+          {% if request.user.is_authenticated %}
+          <li class="nav-item dropdown dropdown-user">
+            <a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
+             <i class="icon-user mr-2"></i>
+              <span>Hello {{request.user.userprofiles.role}} : : {{request.user.userprofiles.first_name}} </span>
+            </a>
+          
+            <div class="dropdown-menu dropdown-menu-right">
+              <a href="{% url 'Loanapp:detail_officer' request.user.userprofiles.id %}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
+              
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'Loanapp:logout_user' %}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
+            </div>
+           
+          </li>
+         
+          {% else %}
+          <a href="{% url 'Loanapp:login_user' %}" style="color: rgb(252, 252, 252);" class="nav-link"><i
+              class="icon-user"></i> Login</a>
+
+          {% endif %}
+
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /main navbar -->
+
+  <div class="page-content">
+    <!-- Main sidebar -->
+        {% if request.user.is_authenticated %}
+
+
+    <div class="sidebar sidebar-dark sidebar-main sidebar-fixed  sidebar-expand-md">
+      <!-- Sidebar mobile toggler -->
+      <div class="sidebar-mobile-toggler text-center">
+        <a href="#" class="sidebar-mobile-main-toggle">
+          <i class="icon-arrow-left8"></i>
+        </a>
+        Navigation
+        <a href="#" class="sidebar-mobile-expand">
+          <i class="icon-screen-full"></i>
+          <i class="icon-screen-normal"></i>
+        </a>
+      </div>
+      <!-- Sidebar content -->
+      <div class="sidebar-content">
+        <!-- Main navigation -->
+        <div class="card card-sidebar-mobile">
+          <ul class="nav nav-sidebar" data-nav-type="accordion">
+
+            <!-- Main -->
+            <li class="nav-item-header">
+              <div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i>
+            </li>
+            <li class="nav-item">
+              <a href="/" class="nav-link active">
+                <i class="icon-home4"></i>
+                <span>
+                  Dashboard
+                </span>
+              </a>
+            </li>
+            <li class="nav-item nav-item-submenu">
+              <a href="#" class="nav-link"><i class="icon-users"></i> <span>Borrowers</span></a>
+              
+              <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                {% if request.user.userprofiles.role == "Admin"  or request.user.userprofiles.role == "Loan Officer" %}
+                <li class="nav-item"><a href="{% url 'Loanapp:register_borrower' %}" class="nav-link"><i
+                  class="icon-user-plus"></i> Register Borrower</a></li>
+                {%endif%}
+                <li class="nav-item"><a href="{% url 'Loanapp:list_borrowers' %}" class="nav-link"> <i
+                      class="icon-list-unordered"></i> List Borrowers</a></li>
+              </ul>
+            </li>
+            <li class="nav-item nav-item-submenu">
+              <a href="#" class="nav-link"><i class="icon-person"></i> <span>Leads</span></a>
+              
+              <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                {% if request.user.userprofiles.role == "Admin"  or request.user.userprofiles.role == "Loan Officer" %}
+                <li class="nav-item"><a href="{% url 'Loanapp:register_lead' %}" class="nav-link"><i
+                  class="icon-person"></i> Register Lead</a></li>
+                {%endif%}
+                <li class="nav-item"><a href="{% url 'Loanapp:list_leads' %}" class="nav-link"> <i
+                      class="icon-list-unordered"></i> View Leads</a></li>
+              </ul>
+            </li>
+            
+            {% if request.user.userprofiles.role == "Admin" %}
+              
+            
+            <li class="nav-item nav-item-submenu">
+              <a href="#" class="nav-link"><i class="icon-user-tie"></i> <span>Officers</span></a>
+              
+              <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                <li class="nav-item"><a href="{% url 'Loanapp:register_user' %}" class="nav-link"><i
+                  class="icon-user-plus"></i> Register Officer</a></li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:list_officers' %}" class="nav-link"> <i
+                    class="icon-list-unordered"></i> List Officers</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                  <a href="#" class="nav-link"><i class="icon-git-branch"></i> <span>Branches</span></a>
+
+
+              <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                <li class="nav-item"><a href="{% url 'Loanapp:register_branch' %}" class="nav-link"><i
+                  class="icon-plus-circle2"></i> Register Branch</a></li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:view_branches' %}" class="nav-link"> <i
+                    class="icon-list-unordered"></i> List Branches</a></li>
+                  </ul>
+                </li>
+            {% endif %}
+    
+            <!-- Forms -->
+            <li class="nav-item-header">
+              <div class="text-uppercase font-size-xs line-height-xs">Loans</div> <i class="icon-menu"
+                title="Forms"></i>
+            </li>
+            <li class="nav-item">
+              
+              {% if request.user.userprofiles.role == 'Admin' or request.user.userprofiles.role == 'Loan Officer'  %}                            
+              <a href="{% url 'Loanapp:apply_for_loan' %}" class="nav-link"><i class="icon-file-plus"></i> <span>
+                Apply For Loan
+              </span></a>
+              {%endif%}
+
+              {% if request.user.userprofiles.role == 'Admin' or request.user.userprofiles.role == 'Loan Verification Officer'  %}                            
+              <a href="{% url 'Loanapp:approve_loan_list' %}" class="nav-link"><i class="icon-checkmark2"></i> <span>
+                Approve Loan
+              </span></a>
+              {% endif %}
+
+              {% if request.user.userprofiles.role == 'Admin' or request.user.userprofiles.role == 'Loan Officer'  %}                            
+              <a href="{% url 'Loanapp:disburse_list' %}" class="nav-link"><i class="icon-info22"></i> <span>
+                Disburse Loan
+              </span></a>
+              {% endif %}
+
+
+              {% if request.user.userprofiles.role == 'Admin' or request.user.userprofiles.role == 'Loan Officer' or request.user.userprofiles.role == 'Loan Collection Officer' %}                            
+                <a href="{% url 'Loanapp:loan_repay' %}" class="nav-link"><i class="icon-cash"></i> <span>
+                  Pay Loans
+                </span></a>
+              </li>
+              {%endif%}
+              
+              <li class="nav-item-header">
+                <div class="text-uppercase font-size-xs line-height-xs">Loan SubReports</div> <i class="icon-menu" title="Forms"></i>
+              </li>
+              
+              <a href="{% url 'Loanapp:loan_list' %}" class="nav-link"><i class="icon-list-unordered"></i> <span>
+                Active Loans
+              </span></a>
+              
+              <a href="{% url 'Loanapp:loan_history' %}" class="nav-link"><i class="icon-history"></i> <span>
+                Loans History 
+              </span></a>
+              
+              
+            
+            {% if request.user.userprofiles.role == 'Admin' or request.user.userprofiles.role == 'Loan Officer' or request.user.userprofiles.role == 'Loan Collection Officer' %}                            
+            <li class="nav-item-header">
+              <div class="text-uppercase font-size-xs line-height-xs">Loan Repayments/Collection</div> <i class="icon-menu" title="Forms"></i>
+            </li>
+            <a href="{% url 'Loanapp:loan_repayments' %}" class="nav-link"><i class="icon-list-unordered"></i> <span>
+              Loan Repayments / Collection
+            </span></a>
+            <a href="{% url 'Loanapp:loan_overpayments' %}" class="nav-link"><i class="icon-info22"></i> <span>
+              Loan Overpayments
+            </span></a>
+           
+            {%endif%}
+            
+            
+            
+            <li class="nav-item-header">
+              <div class="text-uppercase font-size-xs line-height-xs">Reports</div> <i class="icon-menu" title="Forms"></i>
+            </li>
+            
+           
+            <li class="nav-item nav-item-submenu">
+              <a href="#" class="nav-link"><i class="icon-folder"></i> <span>Reports</span></a>
+            
+              <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                <li class="nav-item"><a href="{% url 'Loanapp:active_borrowers' %}" class="nav-link"><i
+                      class="icon-list-unordered"></i> Active Borrowers</a></li>
+                <li class="nav-item"><a href="{% url 'Loanapp:new_borrowers' %}" class="nav-link"> <i
+                      class="icon-list-unordered"></i> New Borrowers</a></li>
+                <li class="nav-item"><a href="{% url 'Loanapp:registration_fee_summary' %}" class="nav-link"> <i
+                  class="icon-list-unordered"></i> Membership Fee Report</a></li>
+                  {% if request.user.userprofiles.role == "Admin" %}
+                <li class="nav-item"><a href="{% url 'Loanapp:registration_fee_income' %}" class="nav-link"> <i
+                  class="icon-list-unordered"></i> Membership Fee Income</a></li>
+                  {% endif %}
+                <li class="nav-item"><a href="{% url 'Loanapp:denied_loans' %}" class="nav-link"> <i
+                  class="icon-list-unordered"></i> Denied Loans</a></li>
+
+                  
+                  {% if request.user.userprofiles.role == 'Admin' %}
+                    
+                  
+                  <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">Officer REPORTS</div> <i class="icon-menu" title="Forms"></i>
+                  </li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:list_officers' %}" class="nav-link"> <i
+                    class="icon-user-tie"></i>Officers Reports</a></li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:pared_officers' %}" class="nav-link"> <i
+                    class="icon-user-tie"></i>Pared Officer Reports</a></li>
+                  
+                  
+                  {% endif %}
+
+                <li class="nav-item-header">
+                  <div class="text-uppercase font-size-xs line-height-xs">Leads REPORTS</div> <i class="icon-menu" title="Forms"></i>
+                </li>
+                <li class="nav-item"><a href="{% url 'Loanapp:list_leads' %}" class="nav-link"> <i
+                  class="icon-users"></i> Customer Leads</a></li>
+
+
+                  <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">DUE DATE REPORTS</div> <i class="icon-menu" title="Forms"></i>
+                  </li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:loans_due_today' %}" class="nav-link"> <i
+                    class="icon-alarm"></i> Loans Due Today</a></li>
+                    <li class="nav-item"><a href="{% url 'Loanapp:loans_due_14_days' %}" class="nav-link"> <i
+                      class="icon-alarm"></i> Loans Due Next 14 days</a></li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:installments_due_today' %}" class="nav-link"> <i
+                    class="icon-alarm"></i> Installments Due Today</a></li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:defaulted_installments' %}" class="nav-link"> <i
+                    class="icon-warning"></i> Defaulted Installments</a></li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:defaulted_loans' %}" class="nav-link"> <i
+                    class="icon-warning"></i> Defaulted Loans</a></li>
+                    <li class="nav-item-header">
+                      <div class="text-uppercase font-size-xs line-height-xs">Disbursement Reports</div> <i class="icon-menu" title="Forms"></i>
+                    </li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:disbursment_report_subform' %}" class="nav-link"> <i
+                    class="icon-list-unordered"></i> Disbursment Report</a></li>
+
+                  {% if request.user.userprofiles.role == "Admin" %}
+
+                  <li class="nav-item"><a href="{% url 'Loanapp:profitability_report' %}" class="nav-link"> <i
+                    class="icon-list-unordered"></i> Profitability Report</a></li>
+                  <li class="nav-item"><a href="{% url 'Loanapp:collection_rate' %}" class="nav-link"> <i
+                    class="icon-list-unordered"></i> Collection Rate Report</a></li>
+
+                  {% endif %}
+
+                    <li class="nav-item-header">
+                      <div class="text-uppercase font-size-xs line-height-xs">Analysis</div> <i class="icon-menu" title="Forms"></i>
+                    </li>
+                    
+                    <a href="{% url 'Loanapp:loans_applied_analysis' %}" class="nav-link"><i class="icon-list-unordered"></i> <span>
+                        Dashboard
+                      </span>
+                    </a>
+              </ul>
+            </li>
+            
+           
+            
+
+            
+          </ul>
+        </div>
+        <!-- /main navigation -->
+
+      </div>
+      <!-- /sidebar content -->
+    </div>
+        {% endif %}
+
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+      {%if messages%}
+      {% for message in messages %}
+      <script>
+        var Pnotify = function () {
+
+          var _componentPnotify = function () {
+            if (typeof PNotify == 'undefined') {
+              console.warn('Warning - pnotify.min.js is not loaded.');
+              return;
+            }
+          }
+          $(document).ready(function () {
+            new PNotify({
+              title: 'Message notice',
+              text: '{{message}}',
+              addclass: 'bg-{{message.tags}} border-success'
+            });
+          });
+          return {
+            init: function () {
+              _componentPnotify();
+            }
+          }
+        }();
+        document.addEventListener('DOMContentLoaded', function () {
+          Pnotify.init();
+        });
+
+      </script>
+      {%endfor%}
+      {%endif%}
+      {% block body %}
+
+
+      {% endblock body %}
+      <!-- Footer -->
+      <div class="navbar navbar-expand-lg navbar-light">
+        <div class="text-center d-lg-none w-100">
+          <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse"
+            data-target="#navbar-footer">
+            <i class="icon-unfold mr-2"></i>
+            Footer
+          </button>
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbar-footer">
+          <span class="navbar-text">
+            &copy; 2022. <a href="#">Walaka Loan Management System</a> by <a href="https://drewapps.com" target="_blank">DrewApps</a>
+          </span>
+
+          <ul class="navbar-nav ml-lg-auto">
+            <li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i
+                  class="icon-lifebuoy mr-2"></i> Support</a></li>
+            <li class="nav-item"><a href="#" class="navbar-nav-link"
+                target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+            <li class="nav-item"><a
+                href="http://drewapps.com"
+                class="navbar-nav-link font-weight-semibold"><span class="text-pink-400"><i class="icon-cart2 mr-2"></i>
+                  Purchase</span></a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- /footer -->
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" caller-id="" role="dialog"
+    aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <div class="container text-center">
+            <h2 class="modal-title" id="">Terminate Lease</h2>
+          </div>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">x</span>
+          </button>
+        </div>
+        <div class="modal-body confirm-delete">
+          <div class="container text-center">
+            <i class="icon-warning" style="color:red; font-size: 50px;"></i><br>
+            <span>Are you sure you want to Terminate this lease?</span><br>
+            <h3>This action is permanent!</h3>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="container">
+            <button style="float:left;" type="button" class="btn btn-primary btn-sm"
+              data-dismiss="modal">Cancel</button>
+            <button style="float:right;" type="button" class="btn btn-danger btn-sm" data-dismiss="modal"
+              id="confirmDeleteButtonModal">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).on('click', '.confirm-delete', function () {
+      $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
+    });
+
+    $(document).on('click', '#confirmDeleteButtonModal', function () {
+      var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
+      window.location = $("#".concat(caller)).attr("href");
+    });
+  </script>
+
+
+
+  {% block scripts %}
+
+  {% endblock scripts %}
+</body>
+
+</html>

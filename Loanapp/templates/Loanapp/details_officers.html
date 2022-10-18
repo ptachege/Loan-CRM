@@ -1,0 +1,427 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block header %}
+<!-- <script src="{% static 'Loanapp/global_assets/js/main/jquery.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/main/bootstrap.bundle.min.js '%}"></script> -->
+<script src="{% static 'Loanapp/global_assets/js/plugins/loaders/blockui.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/notifications/sweet_alert.min.js' %}"></script>
+
+
+<style>
+ 		@media (max-width: 768px) {
+			 .user-img{
+				 width: 200px;
+				 margin-left: auto;
+				 margin-right: auto;
+				 margin-bottom: 30px;
+			 }
+	}
+	.btn-sweet{
+		background: transparent;
+		border: none;
+	}
+	.btn-sweet:focus{
+		outline: none;
+	}
+</style>
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid my-4">
+	<div class="row">
+		<a href="{% url 'Loanapp:list_officers' %}" class="btn btn-walaka btn-sm ml-auto"
+			style="margin-right: 20px; margin-bottom: 10px;border-radius: 5px;">
+			<i class="icon-arrow-left15 mr-1"></i>
+			Go
+			Back</a>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header header-elements-inline" style="background-color:#4A054A;color: #fff;">
+					<h3 class="card-title"><i class="icon-user" style="font-size: 25px;"></i>
+						&nbsp;{{officer.first_name}} {{officer.last_name}}'s Profile</h3>
+					<div class="header-elements">
+						<div class="list-icons">
+							<a class="list-icons-item" data-action="reload"></a>
+							<a class="list-icons-item" data-action="remove"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-5">
+							<img src="{% static 'Loanapp/images/user.png' %} " class="img-fluid user-img "/>
+						</div>
+						<div class="col-md-7">
+							<div class="container-fluid">
+							<table class="ml-4">
+								<tr>
+									<td style="padding-bottom: 10px;"><b>First Name:</b></td>
+									<td style="padding-bottom: 10px;" class="pl-4">{{officer.first_name}}</td>
+								</tr>
+								<tr>
+									<td style="padding-bottom: 10px;"><b>Last Name:</b></td>
+									<td style="padding-bottom: 10px;" class="pl-4">{{officer.last_name}}</td>
+								</tr>
+								<tr>
+									<td><b>Branch:</b></td>
+									<td class="pl-4">{{officer.branch}}</td>
+								</tr>
+							</table>
+							<a href="#" class="btn btn-outline-dark btn-sm my-2 ml-4" style="border-radius: 5px;">
+								<i class="icon-pencil5 mr-1"></i> Edit profile</a>
+						</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="col-md-12 align-items-center">
+						<table class="ml-4">
+							<tr>
+								<td style="padding-bottom: 10px;"><b>
+									<i class="icon-man-woman mr-1"></i> Role:</b></td>
+								<td style="padding-bottom: 10px;" class="pl-4">{{officer.role}}</td>
+							</tr>
+	
+							<tr>
+								<td style="padding-bottom: 10px;"><b>
+									<i class="icon-envelop5 mr-1"></i>
+									Email:</b></td>
+								<td style="padding-bottom: 10px;" class="pl-4">{{officer.email_address}}</td>
+							</tr>
+							<tr>
+								<td><b>
+									<i class="icon-credit-card mr-1"></i>
+									Active:</b></td>
+								<td class="pl-4">Yes</td>
+							</tr>
+						</table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<div class="card my-3">
+				<div class="card-body">
+					<ul class="nav nav-tabs nav-tabs-bottom border-bottom-0 nav-justified">
+						<li class="nav-item"><a href="#bottom-justified-divided-tab1" class="nav-link active" data-toggle="tab"><i
+									class="icon-files-empty2 mr-2"></i> Active Loans</a></li>
+						<li class="nav-item"><a href="#bottom-justified-divided-tab2" class="nav-link" data-toggle="tab"> <i
+									class="icon-books mr-2"></i> Loan History</a></li>
+					</ul>
+			
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="bottom-justified-divided-tab1">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th><b>#</b></th>
+											<th><b>Borrower</b></th>
+											<th><b>Expected Amount</b></th>
+											<th><b>Interest Rate</b></th>
+											<th><b>Period</b></th>
+											<th><b>total loan</b></th>
+											<th><b>Payment Plan</b></th>
+											<th><b>status</b></th>
+											<th><b>Action</b></th>
+										</tr>
+									</thead>
+									<tbody>
+			
+										{% for loan in active_loans %}
+			
+										<tr>
+											<td>{{forloop.counter}}</td>
+											<td> {{loan.borrower}}</td>
+											<td>Ksh {{loan.expected_amount |intcomma}}</td>
+											<td>{{loan.loan_percentage}}%</td>
+											<td>{{loan.period}} days</td>
+											<td>Ksh {{loan.total_loan|intcomma}}</td>
+											<td>{{loan.payment_type}}</td>
+											<td>
+			
+												{% if loan.status == "NEW" %}
+												<span class="badge badge-primary">
+													New
+												</span>
+												{% else %}
+			
+			
+												{% if loan.status == "APPROVED" %}
+			
+												<span class="badge badge-warning">
+													Approved
+												</span>
+			
+												{% else %}
+			
+			
+			
+												{% if loan.status == "DENIED" %}
+			
+												<span class="badge badge-danger">
+													Denied
+												</span>
+			
+												{% else %}
+			
+			
+												{% if loan.status == "DISBURSED" %}
+			
+												<span class="badge badge-success">
+													Active
+												</span>
+			
+												{% else %}
+												<span class="badge badge-success">
+													Fully Paid
+												</span>
+			
+												{% endif %}
+			
+			
+												{% endif %}
+			
+			
+			
+												{% endif %}
+			
+			
+												{% endif %}
+			
+											</td>
+											<td>
+			
+												<a href="{% url 'Loanapp:loan_detail' loan.id %}">
+													<i class="icon-eye4 ml-2" style="color:black;"></i>
+												</a>
+											</td>
+										</tr>
+			
+										{% empty %}
+										<tr>
+											<td colspan="9">
+												<div class="alert alert-warning text-center">
+													<p>
+														<i class="icon-warning mr-3"></i>
+														{{officer}} doesn't have an active loan
+													</p>
+												</div>
+											</td>
+										</tr>
+										{% endfor %}
+			
+			
+									</tbody>
+								</table>
+							</div>
+			
+						</div>
+			
+						<div class="tab-pane fade" id="bottom-justified-divided-tab2">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th><b>#</b></th>
+											<th><b>Borrower</b></th>
+											<th><b>Expected Amount</b></th>
+											<th><b>Interest Rate</b></th>
+											<th><b>Period</b></th>
+											<th><b>total loan</b></th>
+											<th><b>Payment Plan</b></th>
+											<th><b>status</b></th>
+											<th><b>Action</b></th>
+										</tr>
+									</thead>
+									<tbody>
+			
+										{% for loan in loan_history %}
+			
+										<tr>
+											<td>{{forloop.counter}}</td>
+											<td> {{loan.borrower}}</td>
+											<td>Ksh {{loan.expected_amount |intcomma}}</td>
+											<td>{{loan.loan_percentage}}%</td>
+											<td>{{loan.period}} days</td>
+											<td>Ksh {{loan.total_loan|intcomma}}</td>
+											<td>{{loan.payment_type}}</td>
+											<td>
+			
+												{% if loan.status == "NEW" %}
+												<span class="badge badge-primary">
+													New
+												</span>
+												{% else %}
+			
+			
+												{% if loan.status == "APPROVED" %}
+			
+												<span class="badge badge-warning">
+													Approved
+												</span>
+			
+												{% else %}
+			
+			
+			
+												{% if loan.status == "DENIED" %}
+			
+												<span class="badge badge-danger">
+													Denied
+												</span>
+			
+												{% else %}
+			
+			
+												{% if loan.status == "DISBURSED" %}
+			
+												<span class="badge badge-dark">
+													Active
+												</span>
+			
+												{% else %}
+												<span class="badge badge-success">
+													Fully Paid
+												</span>
+			
+												{% endif %}
+			
+			
+												{% endif %}
+			
+			
+			
+												{% endif %}
+			
+			
+												{% endif %}
+			
+											</td>
+											<td>
+			
+												<a href="{% url 'Loanapp:loan_detail' loan.id %}">
+													<i class="icon-eye4 ml-2" style="color:black;"></i>
+												</a>
+											</td>
+										</tr>
+			
+										{% empty %}
+										<tr>
+											<td colspan="9">
+												<div class="alert alert-warning text-center">
+													<p>
+														<i class="icon-warning mr-3"></i> No Record found.
+													</p>
+												</div>
+											</td>
+										</tr>
+										{% endfor %}
+			
+			
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+<div id="modal_iconified" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"><i class="icon-menu7 mr-2"></i> &nbsp;Additional Info.</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<div class="modal-body">
+				<div class="alert alert-info alert-dismissible alert-styled-left border-top-0 border-bottom-0 border-right-0">
+					<span class="font-weight-semibold">What </span> is the current status?.
+					<button type="button" class="close" data-dismiss="alert">×</button>
+				</div>
+
+				<h6 class="font-weight-semibold"><i class="icon-checkmark2 mr-2" style="color:green;"></i> Option 1.</h6>
+				<p>This signifies that the Tenant is the current occupant of the house. It shows that the 
+					tenant is an active tenant.
+				</p>
+
+				<hr>
+
+				<p><i class="icon-cross2 mr-2" style="color: red;"></i>
+					This signifies that the tenant has leased the house in the past but is not current the 
+					occupant of the same house.
+				</p>
+			</div>
+
+			<div class="modal-footer">
+				<button class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 font-size-base mr-1"></i> Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% block scripts %}
+<script>
+	var SweetAlert = function () {
+
+		var _componentSweetAlert = function() {
+			if (typeof swal == 'undefined') {
+				console.warn('Warning - sweet_alert.min.js is not loaded.');
+				return;
+			}
+			var swalInit = swal.mixin({
+                buttonsStyling: false,
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-light'
+            });
+			$('#sweet_warning').on('click', function() {
+            swalInit({
+                title: 'You are about to terminate this Lease. Are you Sure?',
+                text: 'Note that this action is critical!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Proceed!',
+				position: 'top',
+				
+            });
+        });
+
+		};
+		return {
+        initComponents: function() {
+            _componentSweetAlert();
+        }
+    }
+
+	}();
+
+	document.addEventListener('DOMContentLoaded', function() {
+		SweetAlert.initComponents();
+	});
+
+
+</script>
+{% endblock scripts %}
+
+{% endblock body %}

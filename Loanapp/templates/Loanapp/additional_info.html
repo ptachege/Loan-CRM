@@ -1,0 +1,626 @@
+{% extends 'Loanapp/base.html' %}
+{% load static %}
+{% load humanize %}
+    
+{% block header %}
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/selects/select2.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/uniform.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/inputs/inputmask.js'%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/validation/validate.min.js'%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/extensions/cookie.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/demo_pages/form_checkboxes_radios.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/uniform.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/switchery.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/styling/switch.min.js '%}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/forms/wizards/steps.min.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDre49qP3XAU6YrOkHKliMRTbyGiKdxRPk"></script>
+<script src="{% static 'Loanapp/global_assets/js/demo_pages/form_wizard.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/uploaders/fileinput/plugins/purify.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/plugins/uploaders/fileinput/plugins/sortable.min.js' %}"></script>    
+<script src="{% static 'Loanapp/global_assets/js/plugins/uploaders/fileinput/fileinput.min.js' %}"></script>
+<script src="{% static 'Loanapp/global_assets/js/demo_pages/uploader_bootstrap.js' %}"></script>
+
+
+
+
+{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="card my-4">
+        <div class="card-header bg-white header-elements-inline">
+            <h4 class="card-title text-center"> <i class="icon-user-plus"></i> Borrowers Additional Info</h4>
+            <div class="header-elements">
+                <div class="list-icons">
+                    <a class="list-icons-item" data-action="collapse"></a>
+                    <a class="list-icons-item" data-action="reload"></a>
+                    <a class="list-icons-item" data-action="remove"></a>
+                </div>
+            </div>
+        </div>
+        <p id="results"></p>
+
+        <form class="wizard-form steps-validation" action="{% url 'Loanapp:save_avatars' borrower.id %}" method="POST" enctype="multipart/form-data" id="myform" data-fouc>
+            {% csrf_token %}
+            <h6>Guarantors</h6>
+            <fieldset>
+                <div class="card">
+                    <div class="card-body">                      
+                        <a href="" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#add_guarantor"
+                            style="float: right;"><i class="icon-plus-circle2"></i> Add Guarantor</a>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><b>#</b></th>
+                                        <th><b>Guarantor Name</b></th>
+                                        <th><b>Guarantor Contact</b></th>
+                                        <th><b>Relation</b></th>
+                                        <th><b>Action</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="guarantors_table">
+                
+                                    {% for guarantor in all_associated_guarantors %}
+                
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{guarantor.guarantors_full_name}}</td>
+                                        <td>{{guarantor.guarantors_contact}}</td>
+                                        <td>{{guarantor.guarantors_relation}}</td>
+                                        <td>
+                                            <a href="#">
+                                                <i class="icon-bin" style="color:red;"></i>
+                                            </a>
+                
+                                        </td>
+                                    </tr>
+                
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7">
+                                            <div id="Gurantor_alert" class="alert alert-warning text-center">
+                                                <p>
+                                                    <i class="icon-warning mr-3"></i> No Guarantor associated with this borrower. Click the + button to add one.
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                
+                                    {% endfor %}
+                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <h6>Referees</h6>
+            <fieldset>
+                <div class="card">
+                    <div class="card-body">
+                        <a href="" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#add_referee" style="float: right;"><i
+                                class="icon-plus-circle2"></i> Add Referee</a>
+                        <div class="table-responsive">
+                            <table  id="referee_table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><b>#</b></th>
+                                        <th><b>Referee Name</b></th>
+                                        <th><b>Referee Contact</b></th>
+                                        <th><b>Relation</b></th>
+                                        <th><b>Action</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="guarantors_table">
+                
+                                    {% for referee in all_associated_referee %}
+                
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{referee.referee_full_name}}</td>
+                                        <td>{{referee.referee_contact}}</td>
+                                        <td>{{referee.referee_relation}}</td>
+                                        <td>
+                                            <a href="#">
+                                                <i class="icon-bin" style="color:red;"></i>
+                                            </a>
+                
+                                        </td>
+                                    </tr>
+                
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7">
+                                            <div id="alert_referee" class="alert alert-warning text-center">
+                                                <p>
+                                                    <i class="icon-warning mr-3"></i> No Guarantor associated with this borrower. Click
+                                                    the + button to add one.
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                
+                                    {% endfor %}
+                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <h6>Assets</h6>
+            <fieldset>
+                <div class="card">
+                    <div class="card-body">
+                        <span class="badge badge-success">
+                            Assets
+                        </span>
+                        <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_asset" style="float: right;"><i
+                                class="icon-plus-circle2"></i> Add Asset</a>
+                
+                
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><b>#</b></th>
+                                        <th><b>Asset Name</b></th>
+                                        <th><b>Value</b></th>
+                                        <th><b>Description</b></th>
+                                        <th><b>Action</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="assets_table">
+                
+                                    {% for asset in all_associated_assets %}
+                
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{asset.asset_full_name}}</td>
+                                        <td>Ksh {{asset.value|intcomma}}</td>
+                                        <td>{{asset.description}}</td>
+                                        <td>
+                                            <a href="">
+                                                <i class="icon-bin" style="color:red;"></i>
+                                            </a>
+                
+                                        </td>
+                                    </tr>
+                
+                                    {% empty %}
+                                    <tr>
+                                        <td id="alert_assets" colspan="7">
+                                            <div class="alert alert-warning text-center">
+                                                <p>
+                                                    <i class="icon-warning mr-3"></i> No Associated Assets for this borrower.
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                
+                                    {% endfor %}
+                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <h6>Images</h6>
+            <fieldset>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Images: <span class="text-danger">*</span></label>
+                        <div class="col-lg-10">
+                            <input type="file" required name="avatars" class="file-input" multiple="multiple" data-show-upload="false" accept="image/*, video/*"
+                                data-show-caption="true" data-show-preview="true" data-fouc>
+                            <span class="form-text text-muted">Upload Multiple Images by holding ctrl(on Pc),  and selecting all images to upload. Max
+                                files</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="add_guarantor" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"
+                    style="background-color:rgb(50,65,72);color: #fff; padding-top:20px; padding-bottom: 20px;">
+                    <div class="container-fluid text-center">
+                        <h5 class="modal-title">
+                            <i class="icon-user-tie mr-3"></i> Register Guarantor under {{borrower.first_name}}
+                        </h5>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+    
+                <form action="{% url 'Loanapp:create_guarantor_ajax' borrower.id %}" id="post-form" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div
+                            class="alert mb-3 alert-info alert-dismissible alert-styled-left text-center border-top-0 border-bottom-0 border-right-0">
+                            The Guarantor will be tied to this borrower on submiting details. </span>
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Guarantors Full name:</label>
+                                    <input type="text" required id="guarantors_full_name" name="guarantors_full_name" placeholder="jane"
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+    
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Phone:</label>
+                                    <input type="text" required id="guarantors_contact" name="guarantors_contact" placeholder="+2548*"
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Relationship with borrower:</label>
+                                    <input type="text" required id="guarantors_relation" name="guarantors_relation" placeholder="Mother"
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark mr-auto" data-dismiss="modal">Close</button>
+                        <button type="submit" id="sendbtn" class="btn bg-primary">Save Changes <span id="sendbtnspinner" class="spinner-border-sm"></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="add_referee" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"
+                    style="background-color:rgb(50,65,72);color: #fff; padding-top:20px; padding-bottom: 20px;">
+                    <div class="container-fluid text-center">
+                        <h5 class="modal-title">
+                            <i class="icon-user-tie mr-3"></i> Register Referee under {{borrower.first_name}}
+                        </h5>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="{% url 'Loanapp:create_referee_ajax' borrower.id %}" id="post-form2" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div
+                            class="alert mb-3 alert-info alert-dismissible alert-styled-left text-center border-top-0 border-bottom-0 border-right-0">
+                            The Referee will be tied to this borrower on submiting details. </span>
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Referee Full name:</label>
+                                    <input type="text" required id="referee_full_name" name="referee_full_name" placeholder="jane"
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Phone:</label>
+                                    <input type="text" required id="referee_contact" name="referee_contact" placeholder="+2548*"
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Relationship with borrower:</label>
+                                    <input type="text" required  id="referee_relation" name="referee_relation" placeholder="Mother"
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark mr-auto" data-dismiss="modal">Close</button>
+                        <button type="submit" id="sendbtn2" class="btn bg-primary">Save Changes <span id="sendbtnspinner2"
+                                class="spinner-border-sm"></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="add_asset" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"
+                    style="background-color:rgb(50,65,72);color: #fff; padding-top:20px; padding-bottom: 20px;">
+                    <div class="container-fluid text-center">
+                        <h5 class="modal-title">
+                            <i class="icon-user-tie mr-3"></i> Register Asset under : : {{borrower.first_name}}
+                        </h5>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="{% url 'Loanapp:create_asset_ajax' borrower.id %}" id="post-form3" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div
+                            class="alert mb-3 alert-info alert-dismissible alert-styled-left text-center border-top-0 border-bottom-0 border-right-0">
+                            The Asset will be tied to this borrower on submiting details. </span>
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Asset name:</label>
+                                    <input type="text" required id="asset_full_name" name="asset_full_name" placeholder="asset_full_name"
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Value:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-prepend">
+                                            <span class="input-group-text">Ksh</span>
+                                        </span>
+                                        <input type="number" value="0" id="value" name="value"
+                                            class="form-control border-teal border-1" placeholder="Value">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>description:</label>
+                                    <input type="text" required id="description" name="description" placeholder="description here..."
+                                        class="form-control border-teal border-1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark mr-auto" data-dismiss="modal">Close</button>
+                        <button type="submit" id="sendbtn3" class="btn bg-primary">Save Changes <span id="sendbtnspinner3"
+                                class="spinner-border-sm"></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% block scripts %}
+
+<script>
+    $('#post-form').on('submit', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        console.log("form submitted!")  // sanity check
+        console.log("create post is working!") // sanity check
+        var form = $(this);
+        let url = $(this).attr('action');
+        $.ajax({
+            url: url, // the endpoint
+            type: "POST", // http method
+            data: $(this).serialize(),
+            beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
+                // $('#sendbtn').removeClass('ni ni-send')
+                $('#sendbtnspinner').addClass('spinner-border')
+                document.getElementById('sendbtn').setAttribute('disabled', true)
+
+            },
+
+            // handle a successful response
+            success: function (json) {
+                 $('#guarantors_full_name').val(''); 
+                 $('#guarantors_relation').val(''); 
+                 $('#guarantors_contact').val(''); 
+                console.log(json); // log the returned json to the console
+                console.log("success"); // another sanity check
+                $('#Gurantor_alert').hide()
+
+                $("#guarantors_table").append(
+                    `
+                    <tr>
+                            <td>
+                                ${json.record}
+                            </td>
+                            <td>
+                                ${json.guarantors_name}
+                            </td>
+                            <td>
+                                ${json.guarantors_contact}
+                            </td>
+                            <td>
+                                ${json.relation}
+                            </td>
+                            <td>
+                                <a href="#">
+                                    <i class="icon-bin" style="color:red;"></i>
+                                </a>
+    
+                            </td>
+                        </tr>
+                   `
+                );
+                console.log("success"); // another sanity check            
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            },
+
+            complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+                $('#sendbtnspinner').removeClass('spinner-border')
+                document.getElementById('sendbtn').removeAttribute('disabled')
+                $('#add_guarantor').modal('hide');
+
+            },
+        });
+    });
+</script>
+<script>
+    $('#post-form2').on('submit', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        console.log("form submitted!")  // sanity check
+        console.log("create post is working!") // sanity check
+        var form = $(this);
+        let url = $(this).attr('action');
+        $.ajax({
+            url: url, // the endpoint
+            type: "POST", // http method
+            data: $(this).serialize(),
+            beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
+                // $('#sendbtn').removeClass('ni ni-send')
+                $('#sendbtnspinner2').addClass('spinner-border')
+                document.getElementById('sendbtn2').setAttribute('disabled', true)
+
+            },
+
+            // handle a successful response
+            success: function (json) {
+                 $('#referee_full_name').val(''); 
+                 $('#referee_contact').val(''); 
+                 $('#referee_relation').val(''); 
+                 $('#alert_referee').hide()
+                console.log(json); // log the returned json to the console
+                console.log("success"); // another sanity check
+
+                $("#referee_table").append(
+                    `
+                    <tr>
+                            <td>
+                                ${json.record}
+                            </td>
+                            <td>
+                                ${json.referee_full_name}
+                            </td>
+                            <td>
+                                ${json.referee_contact}
+                            </td>
+                            <td>
+                                ${json.referee_relation}
+                            </td>
+                            <td>
+                                <a href="#">
+                                    <i class="icon-bin" style="color:red;"></i>
+                                </a>
+    
+                            </td>
+                        </tr>
+                   `
+                );
+                console.log("success"); // another sanity check            
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            },
+
+            complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+                $('#sendbtnspinner2').removeClass('spinner-border')
+                document.getElementById('sendbtn2').removeAttribute('disabled')
+                $('#add_referee').modal('hide');
+
+            },
+        });
+    });
+</script>
+<script>
+    $('#post-form3').on('submit', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        console.log("form submitted!")  // sanity check
+        console.log("create post is working!") // sanity check
+        var form = $(this);
+        let url = $(this).attr('action');
+        $.ajax({
+            url: url, // the endpoint
+            type: "POST", // http method
+            data: $(this).serialize(),
+            beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
+                // $('#sendbtn').removeClass('ni ni-send')
+                $('#sendbtnspinner3').addClass('spinner-border')
+                document.getElementById('sendbtn3').setAttribute('disabled', true)
+
+            },
+
+            // handle a successful response
+            success: function (json) {
+                 $('#asset_full_name').val(''); 
+                 $('#value').val(''); 
+                 $('#description').val(''); 
+                 $('#alert_assets').hide()
+                console.log(json); // log the returned json to the console
+                console.log("success"); // another sanity check
+
+                $("#assets_table").append(
+                    `
+                    <tr>
+                            <td>
+                                ${json.record}
+                            </td>
+                            <td>
+                                ${json.asset_full_name}
+                            </td>
+                            <td>
+                                ${json.value}
+                            </td>
+                            <td>
+                                ${json.description}
+                            </td>
+                            <td>
+                                <a href="#">
+                                    <i class="icon-bin" style="color:red;"></i>
+                                </a>
+    
+                            </td>
+                        </tr>
+                   `
+                );
+                console.log("success"); // another sanity check            
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            },
+
+            complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+                $('#sendbtnspinner3').removeClass('spinner-border')
+                document.getElementById('sendbtn3').removeAttribute('disabled')
+                $('#add_asset').modal('hide');
+
+            },
+        });
+    });
+</script>
+
+{% endblock scripts %}
+
+{% endblock body %}
